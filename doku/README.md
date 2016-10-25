@@ -1,32 +1,52 @@
 # ES&HH
 
 ## Idee
-LED Lichterkette unter Bett gesteuert durch Raspberry PI. Jede LED in der Kette kann einzeln angesteuert werden. Die Steuerung soll auf Licht, Bewegung, Uhrzeit und manuelle Eingabe reagieren k�nnen. Die Uhrzeit soll in einer Datenbank geplant / gespeichert werden k�nnen. Die Datenbank soll f�r Anbindungen von anderen Systemen her auch erreichbar sein. 
-Die Eingabe und Konfiguration soll �ber eine abstrakte Schnittstelle m�glich sein, die verschiedene Endger�te erlaubt. 
+Es soll eine LED-Pixelkette mit einem Raspberry PI als Microcomputer gesteuert werden. Jeder LED-Pixel besteht aus drei einzelnen LEDs, die durch einen integrierten Schaltkreis kontrolliert werden. So kann jeder Pixel in der Kette einzeln angesteuert werden. Die LED-Pixelkette wird durch eine Applikation auf dem Raspberry PI gesteuert. Die Applikation auf dem Raspberry PI soll Licht, Bewegung, Uhrzeit und manuelle Eingabe als Input annehmen können. Auf dem Raspberry PI wird für persistente Datenhaltung eine Datenbank geführt. Die Datenbank soll für wiederkehrende und geplante Ereignisse benutzt werden. Die Applikation reagiert auf Inputs, geplante oder wiederkehrende Ereignisse mit der Ansteuerung der LED-Pixelkette, die verschiedene Modi zur Darstellung anbietet.
+
+Die Datenbank soll für Anbindungen von anderen Systemen her auch erreichbar sein.
+
+Die Eingabe und Konfiguration soll über eine abstrakte Schnittstelle möglich sein, die verschiedene Endgeräte erlaubt.
+
+## Projektteilnehmer
+* Andreas Züger
+* Endre Marczi
+* Markus Schenk
 
 ## Projektname
-?? (Wake-Up-Light?)
+WakeUp-Light mit Raspberry PI
 
 ## Schichten
-1. Treiber (Ansteuerung jeder einzelnen LED In Python)
+1. Treiber (Ansteuerung jedes Pixels In Python)
 2. Logik (Priorisierung von Inputs (Uhrzeit / Licht / Bewegung / manuell)
-3. Datenbank f�r Speicherung (MySQL / mongo / postgreSQL)
+3. Datenbank für Speicherung (MySQL / mongo / postgreSQL)
 4. Middleware (Apache, Python Bridge, python-rpc-json)
-5. GUI (Webseite / App)
+5. *~~GUI (Webseite / App)~~ (out of scope)*
+
+## Skizze
+![Projektskizze](/home/markus/ESHH/doku/Projektskizze.png  "Projektskizze")
+
+## Anforderungen
+
+### Software
+* Übers Netzwerk ansprechbare Web Service Schnittstelle
+* Web Server mit Web Service Support auf Raspberry PI
+* Treiber für Zugriff auf WS2801 Pixelkette über GPIO
+* Datenbank mit vernünftigem Footprint auf Raspberry PI
+* Logikapplikation zur Komponentenverbindung
+
+### Hardware
+* WS2801 Pixelkette
+* Bewegungssensor
+* Schalter für manuelle Eingabe
 
 ## Erweiterungsideen
-* LIFX
-* Receiver
-
-
-## Links
-* https://www.digitalocean.com/community/tutorials/how-to-set-up-an-apache-mysql-and-python-lamp-server-without-frameworks-on-ubuntu-14-04
-
+* LIFX (Lichtsteuerung über Applikation)
+* Receiver (Musiksteuerung über Applikation)
 
 ## Termine
 * 15.10.2016 : Abgabe Projektidee 15.10.2016
 * 05.11.2016 : Abgabe Kontextdiagramm, Anforderungsliste, Terminplan
 * 19.11.2016 : Abgabe Schaltungsentwurf / Softwareentwurf / Testkonzept
-* 03.12.2016 : Pr�senz
+* 03.12.2016 : Präsenz
 * 03.01.2017 : Abgabe Dokumentation
-* 14.01.2017 : Pr�sentation
+* 14.01.2017 : Präsentation
