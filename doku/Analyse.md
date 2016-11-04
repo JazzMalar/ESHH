@@ -27,6 +27,11 @@ Mit einem Raspberry Pi als Controller und einem LED-Strip wird ein Wake-Up Light
 	1. Wake-Up Light prüft Umgebungslicht
 		1. Wake-Up Light schaltet helligkeitsbedingt das Leuchtmittel ein
 	1. Wake-Up Light schaltet sich automatisch aus
+* Betrieb auf Knopfdruck
+	1. Benutzer drückt Knopf
+	1. Wake-Up Light schaltet ein
+	1. Benutzer drückt Knopf erneut
+	1. Wake-Up Light schaltet aus
 
 ### Kontextdiagramm
 ![Kontextdiagramm](/home/markus/ESHH/doku/Kontextdiagramm.png  "Kontextdiagramm Wake-Up Light")
