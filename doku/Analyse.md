@@ -27,6 +27,11 @@ Mit einem Raspberry PI soll ein eigenes Wake-Up Light erstellt werden, dass übe
 	1. Wake-Up Light prüft Umgebungslicht
 		1. Wake-Up Light merkt dass es dunkel ist und startet Leuchtmittel
 	1. Wake-Up Light schaltet sich automatisch aus
+* Betrieb auf Knopfdruck
+	1. Benutzer drückt Knopf
+	1. Wake-Up Light schaltet ein
+	1. Benutzer drückt Knopf erneut
+	1. Wake-Up Light schaltet aus
 
 ### Kontextdiagramm
 ![Kontextdiagramm](/home/markus/ESHH/doku/Kontextdiagramm.png  "Kontextdiagramm Wake-Up Light")
