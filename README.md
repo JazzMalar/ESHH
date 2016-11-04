@@ -24,6 +24,17 @@ git branch doku origin/doku
 git branch source origin/source
 git config --global push.default simple
 ```
+### Bedienung
+
+#### Aenderung an Dokumentation
+```bash
+git checkout doku
+-- Änderungen vornehmen
+git add *
+git commit
+git push
+```
+
 ### GIT-Richtlinien
 Grundsätzlich gibt es 5 Branches. 
 * Master - Read-Only Branch in dem der Repository Owner bestimmte Milestones von anderen Branches "pulled".
