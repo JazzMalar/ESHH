@@ -34,7 +34,7 @@ Mit einem Raspberry Pi als Controller und einem LED-Strip wird ein Wake-Up Light
 	1. Wake-Up Light schaltet aus
 
 ### Kontextdiagramm
-![Kontextdiagramm](/home/markus/ESHH/doku/Kontextdiagramm.png  "Kontextdiagramm Wake-Up Light")
+![Kontextdiagramm](Kontextdiagramm.png  "Kontextdiagramm Wake-Up Light")
 
 ## Zeitplan
 ### Rahmenbedingungen
