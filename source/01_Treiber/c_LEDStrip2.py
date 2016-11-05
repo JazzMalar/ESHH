@@ -35,6 +35,13 @@ class LEDStrip(object):
         self.logger.log("debug","getFullStrip()")
         return self.__strip
 
+    def setFullStripColor(self,r,g,b,prio,usedBy=1):
+        for i in self.__strip:
+            i.setRGB(r,g,b,prio,usedBy)
+
+    def setOneLEDColor(self,ledNumber,r,g,b,prio,usedBy=1):
+        self.__strip[ledNumber].setRGB(r,g,b,prio,usedBy)
+
     def getLEDNumber(self,ledNumber):
         self.logger.log("debug","getLEDNumber ledNumber: "+str(ledNumber))
         if ledNumber > (len(self.__strip) -1):
