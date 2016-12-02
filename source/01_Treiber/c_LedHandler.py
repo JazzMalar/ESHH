@@ -25,7 +25,7 @@ class LEDHandler():
             #else:
             #    return False
         else:
-            return false
+            return False
 
     def getPrio(self):
         return self.__getLED().getPrio()
@@ -36,7 +36,8 @@ class LEDHandler():
     def setRGB(self,r,g,b,prio,usedBy):
         vorhanden = False #usedBy kann verschieden sein
         for x in self.leds:
-            if x.getUsedBy == usedBy:
+        #    print str(x.getUsedBy) +" "+str(usedBy)
+            if x.getUsedBy() == usedBy:
                 vorhanden = True
                 x.setRGB(r,g,b,prio,usedBy)
                 continue
@@ -62,4 +63,8 @@ class LEDHandler():
     def getB(self):
         return self.__getLED().getB()
 
+    def getRGB(self):
+        return self.__getLED().getRGB()
 
+    def getRGB_LPD6803(self):
+        return self.__getLED().getRGB_LPD6803()

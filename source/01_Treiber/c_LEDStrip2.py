@@ -67,12 +67,31 @@ class LEDStrip(object):
         return self.debug
 
     def setColorToStrip(self):
-        self.__write_stream(self.__strip)
+        # 3 bytes per pixel
+        PIXEL_SIZE = 3
+        PIXEL_SIZE_SM16716 = 4
+        pixel_output = bytearray(self.__leds * PIXEL_SIZE + 3);
+        # print "update"
+        # self.getFullColor()
+        # pixel_output = self.list[:]
+
+        for pixel_offset in [(x * 3) for x in range(0, self.__leds)]:
+            stripPixel = pixel_offset / 3
+            # print "stripPixel: "+str(stripPixel)
+            if self.__getStripType() == "LPD6803":
+                pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB_LPD6803()
+            else:
+                pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB()
+            self.__write_stream(pixel_output)
+
 
     def __write_stream(self,pixels):
         # 3 bytes per pixel
         PIXEL_SIZE = 3
         PIXEL_SIZE_SM16716 = 4
+        if not self.__getDebug():
+            spi_dev_name = '/dev/spidev0.0';
+            spidev = file(spi_dev_name, "wb")
 
         if self.__getStripType() == "LPD6803":
             pixel_out_bytes = bytearray(2)
@@ -107,5 +126,6 @@ class LEDStrip(object):
         else:
             if not self.__getDebug():
                 spidev.write(pixels)
-
+        if not self.__getDebug():
+            spidev.flush()
         return
