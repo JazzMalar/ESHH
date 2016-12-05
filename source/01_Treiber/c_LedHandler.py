@@ -19,11 +19,7 @@ class LEDHandler():
                 if(x.getPrio() > highestPrio):
                     highestPrioObj=x
                     highestPrio = x.getPrio()
-            # TODO prio kann auch 0 sein
-            #if(highestPrioObj):
             return highestPrioObj
-            #else:
-            #    return False
         else:
             return False
 
@@ -46,7 +42,8 @@ class LEDHandler():
             led.setRGB(r,g,b,prio,usedBy)
             self.leds.append(led)
 
-    def removeLed(self,usedBy):
+    # loescht LED eines Users....
+    def removeLEDUsedBy(self, usedBy):
         found = False
         for x in self.leds:
             if x.getUsedBy() == usedBy:
@@ -66,5 +63,6 @@ class LEDHandler():
     def getRGB(self):
         return self.__getLED().getRGB()
 
+    # gibt Color in 6803 Farbreihenfolge
     def getRGB_LPD6803(self):
         return self.__getLED().getRGB_LPD6803()

@@ -18,7 +18,7 @@ class LEDStrip(object):
     #debug = true --> test ohne RASPI, spi-funktionen werden ausgeklammert
     def __init__(self,anzahlLEDs, stripType="WS2801",debug=False):
         self.logger = logger("LEDStrip")
-        self.__leds     = anzahlLEDs
+        self.__anzLeds     = anzahlLEDs
         self.__strip = []
         self.__setStripType(stripType)
         self.__setDebug(debug)
@@ -40,17 +40,30 @@ class LEDStrip(object):
             i.setRGB(r,g,b,prio,usedBy)
 
     def setOneLEDColor(self,ledNumber,r,g,b,prio,usedBy=1):
-        self.__strip[ledNumber].setRGB(r,g,b,prio,usedBy)
+        if ledNumber < self.__anzLeds:
+            self.__strip[ledNumber].setRGB(r,g,b,prio,usedBy)
 
     def getLEDNumber(self,ledNumber):
         self.logger.log("debug","getLEDNumber ledNumber: "+str(ledNumber))
-        if ledNumber > (len(self.__strip) -1):
+        if ledNumber > (self.__anzLeds -1):
             return -1
         else:
             return self.__strip[ledNumber]
 
+    def removeLEDUsedByFullStrip(self,usedBy):
+        found = 0
+        for i in self.__strip:
+            if (i.removeLEDUsedBy(usedBy)):
+                found = found + 1
+        return found
+
+    def removeLEDUsedBy(self, ledNumber,usedBy):
+        return self.__strip[ledNumber].removeLEDUsedBy(usedBy)
+
+
+
     def printStrip(self):
-        for i in range(0, len(self.__strip)-1):
+        for i in range(0, self.__anzLeds):
             led = self.getLEDNumber(i)
             print "["+str(i)+"] RGB "+str(hex(led.getR()))+"/"+str(hex(led.getG()))+"/"+str(hex(led.getB()))+" Prio: "+str(led.getPrio())+" usedBy: "+str(led.getUsedBy())
 
@@ -70,12 +83,12 @@ class LEDStrip(object):
         # 3 bytes per pixel
         PIXEL_SIZE = 3
         PIXEL_SIZE_SM16716 = 4
-        pixel_output = bytearray(self.__leds * PIXEL_SIZE + 3);
+        pixel_output = bytearray(self.__anzLeds * PIXEL_SIZE + 3);
         # print "update"
         # self.getFullColor()
         # pixel_output = self.list[:]
 
-        for pixel_offset in [(x * 3) for x in range(0, self.__leds)]:
+        for pixel_offset in [(x * 3) for x in range(0, self.__anzLeds)]:
             stripPixel = pixel_offset / 3
             # print "stripPixel: "+str(stripPixel)
             if self.__getStripType() == "LPD6803":

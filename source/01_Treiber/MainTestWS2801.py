@@ -5,7 +5,7 @@ import random
 
 anzLEDs = 50
 
-strip = LEDStrip(anzLEDs,"LPD6803",False)
+strip = LEDStrip(anzLEDs)
 strip.getFullStrip()
 #ganzen Strip mit blau setzen
 strip.setFullStripColor(0,0,255,1)
