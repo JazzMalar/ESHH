@@ -22,7 +22,7 @@ apt-get -y -qq  install debconf-utils
 echo "installing $java_version..."
 debconf-set-selections <<< "debconf shared/accepted-oracle-license-v1-1 select true"
 debconf-set-selections <<< "debconf shared/accepted-oracle-license-v1-1 seen true"
-apt-get -y -qqq install $java_version
+apt-get -y -qqq install $java_version > /dev/null
 
 export JAVA_HOME="$java_home"
 
@@ -36,7 +36,7 @@ echo "adding tomcat user..."
 adduser --quiet --system --shell /bin/bash --gecos 'Tomcat Java Servlet and JSP engine' --group --disabled-password --home /home/tomcat $tomcat_version
 
 echo "installing $tomcat_version..."
-apt-get -y -qq install $tomcat_version
+apt-get -y -qq install $tomcat_version > /dev/null
 
 tomcatinstall=$(dpkg --list | grep $tomcat-version | wc -l)
 if [ $tomcatinstall -lt 1 ] ; then
@@ -47,7 +47,7 @@ fi
 echo "installing $mysql_version..."
 debconf-set-selections <<< "$mysql_version mysql-server/root_password password eshh"
 debconf-set-selections <<< "$mysql_version mysql-server/root_password_again password eshh"
-apt-get -y -qq install $mysql_version
+apt-get -y -qq install $mysql_version > /dev/null
 
 mysqlinstall=$(dpkg --list | grep $mysql_version | wc -l)
 if [ $mysqlinstall -lt 1 ] ; then
@@ -55,6 +55,7 @@ if [ $mysqlinstall -lt 1 ] ; then
 	exit 1; 
 fi
 
+echo "adding test data to database mydb..."
 mysql --user=root --password=eshh < 02_SQL/WI39_Coding.Datenbankscripts.sql
 
 
