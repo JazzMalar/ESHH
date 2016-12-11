@@ -1,20 +1,20 @@
 # Analyse
 
 ## Problembeschreibung
-Viele Menschen starten - gerade in den dunklen Wintermonaten - sehr schlecht in den Tag, weil sie durch einen schrillen Weckton vor Sonnenaufgang geweckt werden. Gerade Menschen mit einem späten Chronotypen fühlen sich dadurch den ganzen Tag schläfrig und können oftmals weniger Leistung bringen. Oftmals führt dies zu einer ungesunden Überzufuhr von Thein. 
+Viele Menschen starten - gerade in den dunklen Wintermonaten - sehr schlecht in den Tag, weil sie durch einen schrillen Weckton vor Sonnenaufgang geweckt werden oder in einem ungünstigen Schlafrythmus sind. Gerade Menschen mit einem späten Chronotypen fühlen sich dadurch den ganzen Tag schläfrig und können oftmals weniger Leistung bringen. Auch führt dies zu einer ungesunden Überzufuhr vom Wirkstoff Thein. 
 
-Der Markt hat auf diese Problematik mit sogenannten Wake-Up Lights reagiert. Ein Wake-Up Light simuliert einen künstlichen Sonnenaufgang zur gewünschten Weckzeit und verspricht so einen natürlicheren Aufwachvorgang. Die Wirksamkeit von Wake-Up Lights wurde auch schon in einer Studie von Giménez [Gim] bestätigt. 
+Der Markt hat auf diese Problematik mit sogenannten Wake-Up Lights reagiert. Ein Wake-Up Light simuliert einen künstlichen Sonnenaufgang auf die gewünschte Weckzeit hin und verspricht so einen natürlicheren Aufwachvorgang. Die positive Wirksamkeit von Wake-Up Lights wurde auch schon in einer Studie von Giménez [Gim] untersucht und aufgezeigt.
 
-Die existierenden Produkte am Markt sind meist stark eingebunden in ein bestehendes Produktökosystem, was ihre Bedienung vereinfacht aber wenig Erweiterungs- und Anbindungsmöglichkeiten bedeutet. Beispielsweise erlauben heutige Wake-Up Lights Weckmusik nur in Kombination mit lokalen Musikdateien auf dem Smartphone oder mit Musikdiensten. 
+Die existierenden Produkte auf dem Markt sind meist stark eingebunden in ein bestehendes Produktökosystem, was ihre Bedienung vereinfacht, aber meist wenig Erweiterungs- und Anbindungsmöglichkeiten bietet. Beispielsweise erlauben heutige Wake-Up Lights Weckmusik nur in Kombination mit lokalen Musikdateien auf dem Smartphone oder mit Musikdiensten. 
 
 ## Vision 
-Mit einem Raspberry PI soll ein eigenes Wake-Up Light erstellt werden, dass über ein einfach zu bedienendes GUI konfiguriert werden kann. Der Benutzer kann das Wake-Up Light so konfigurieren, dass er zu einer bestimmten Zeit geweckt wird. Zusätzlich soll das Wake-Up Light auch reagieren, wenn der Benutzer in der Nacht aufsteht und ihn mit gedimmten Licht unterstützen aber nicht komplett wecken. Die Software auf dem Raspberry PI soll ausserdem in Zukunft noch weitere - allenfalls bereits bestehende - Geräte wie einen Receiver, oder Smart Lights ansprechen können um den Weckvorgang noch weiter auf den Benutzer zuzuschneidern. 
+Mit einem Raspberry Pi als Controller und einem LED-Strip wird ein Wake-Up Light konzipiert und gebaut, das über ein GUI konfiguriert werden kann. Der Benutzer kann das Wake-Up Light so einstellen, dass er auf eine bestimmten Zeit hin geweckt wird. Zusätzlich soll das Wake-Up Light mit schwachem Licht einschalten, wenn der Benutzer in der Nacht aufsteht und das Zimmer verlässt. Die Software auf dem Raspberry Pi soll ausserdem in Zukunft noch weitere - allenfalls bereits bestehende - Geräte wie einen Receiver, oder Smart Lights ansprechen, um den Weckvorgang noch weiter auf den Benutzer zuzuschneidern. 
 
 ## Anforderungen
-1. Das Wake-Up Light soll ein Leuchtmittel eine konfigurierbare Zeit vor dem geplanten Weckzeitpunkt anfangen zu erhellen (dimmen). 
-2. Das Wake-Up Light soll auf Bewegungen reagieren, und ein Leuchtmittel in einen Nachtlichtmodus versetzen.
-3.  Das Wake-Up Light soll das Leuchtmittel nur einschalten, wenn es nicht bereits hell in der Umgebung ist.
-4. Das Wake-Up Light soll auch per Knopfdruck einschaltbar sein und so als eine normale Zimmerbeleuchtung dienen. 
+1. Das Wake-Up Light dimmt ein Leuchtmittel, so dass es in einer vorgegebenen Zeitperiode von 0 lux auf das maximal Mögliche gedimmt wird. Die von der Zeit abhängige Lichtstärke ist hartcodiert, während der Zeitpunkt bei maximaler Leuchtstärke durch den Benutzer festgelegt wird (Weckzeit). 
+2. Das Wake-Up Light reagiert bei Dunkelheit auf Bewegungen, und schaltet das Leuchtmittel im Nachtlichtmodus ein.
+3. Das Wake-Up Light schaltet das Leuchtmittel nur ein, wenn es nicht bereits hell in der Umgebung ist.
+4. Das Wake-Up Light ist durch Knopfdruck einschaltbar und dient so als eine normale Zimmerbeleuchtung. 
 
 ### Use Cases
 * Weckfunktion
@@ -25,7 +25,7 @@ Mit einem Raspberry PI soll ein eigenes Wake-Up Light erstellt werden, dass übe
 * Nachtlichtfunktion
 	1. Benutzer steht auf
 	1. Wake-Up Light prüft Umgebungslicht
-		1. Wake-Up Light merkt dass es dunkel ist und startet Leuchtmittel
+		1. Wake-Up Light schaltet helligkeitsbedingt das Leuchtmittel ein
 	1. Wake-Up Light schaltet sich automatisch aus
 * Betrieb auf Knopfdruck
 	1. Benutzer drückt Knopf
@@ -34,7 +34,7 @@ Mit einem Raspberry PI soll ein eigenes Wake-Up Light erstellt werden, dass übe
 	1. Wake-Up Light schaltet aus
 
 ### Kontextdiagramm
-![Kontextdiagramm](/home/markus/ESHH/doku/Kontextdiagramm.png  "Kontextdiagramm Wake-Up Light")
+![Kontextdiagramm](Kontextdiagramm.png  "Kontextdiagramm Wake-Up Light")
 
 ## Zeitplan
 ### Rahmenbedingungen

@@ -1,0 +1,9 @@
+[treiber-config]
+#stripTpye: WS2801, LPD6803
+stripType       = LPD6803
+
+#anzLEDs: wie viele Leds können einzeln angesteuert werden
+anzLEDs         = 50
+
+#debugMode: nur einschalten, wenn an einem PC getestet wird und keine Ausgabe über spi gewünscht wird
+debugMode       = True
