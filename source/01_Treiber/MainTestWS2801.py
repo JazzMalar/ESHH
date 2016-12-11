@@ -16,7 +16,6 @@ for i in range (0,anzLEDs):
 
 
 for i in range (0,anzLEDs):
-    #jedes 5te led auf gelb setzen
     strip.setOneLEDColor(i, 255,255,255, 151, 100)
 
 strip.setColorToStrip()

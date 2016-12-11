@@ -2,10 +2,15 @@
 from c_LEDStrip2 import LEDStrip
 import time
 import random
+from configparser import readConfig
 
-anzLEDs = 50
+configfile ="Config/treiberConfig.txt"
+configParam = "treiber-config"
 
-strip = LEDStrip(anzLEDs,"LPD6803",False)
+config = readConfig(configfile,configParam)
+anzLEDs = 50# int(config.getConfigParam("anzleds"))
+
+strip = LEDStrip(config.getConfigParam("anzleds"),config.getConfigParam("striptype"),config.getConfigParam("debugmode"))
 strip.getFullStrip()
 #ganzen Strip mit blau setzen
 strip.setFullStripColor(0,0,255,1)

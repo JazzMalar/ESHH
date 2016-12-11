@@ -18,7 +18,7 @@ class LEDStrip(object):
     #debug = true --> test ohne RASPI, spi-funktionen werden ausgeklammert
     def __init__(self,anzahlLEDs, stripType="WS2801",debug=False):
         self.logger = logger("LEDStrip")
-        self.__anzLeds     = anzahlLEDs
+        self.__anzLeds     = int(anzahlLEDs)
         self.__strip = []
         self.__setStripType(stripType)
         self.__setDebug(debug)
@@ -26,7 +26,7 @@ class LEDStrip(object):
 
         self.logger.log("debug","create LEDStrip mit "+str(anzahlLEDs)+"LEDs")
 
-        for led in range(0, anzahlLEDs):
+        for led in range(0, self.__anzLeds):
             self.__strip.append(LEDHandler())
         self.logger.log("debug","Strip:")
         self.logger.log("debug",self.__strip)
