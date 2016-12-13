@@ -67,6 +67,13 @@ class LEDStrip(object):
             led = self.getLEDNumber(i)
             print "["+str(i)+"] RGB "+str(hex(led.getR()))+"/"+str(hex(led.getG()))+"/"+str(hex(led.getB()))+" Prio: "+str(led.getPrio())+" usedBy: "+str(led.getUsedBy())
 
+    def printStripChanges(self):
+        for i in range(0, self.__anzLeds):
+            led = self.getLEDNumber(i)
+            if led.isNewColor():
+                print "[" + str(i) + "] RGB " + str(hex(led.getR())) + "/" + str(hex(led.getG())) + "/" + str(
+                hex(led.getB())) + " Prio: " + str(led.getPrio()) + " usedBy: " + str(led.getUsedBy())
+
     def __setStripType(self,type):
         self.stripType = type
 
