@@ -3,7 +3,15 @@
 mysql_version="mysql-server-5.5"
 tomcat_version="tomcat8"
 java_version="oracle-java8-installer"
-java_home="/usr/lib/jvm/java-8-oracle"
+
+context="ROOT"
+sqlFile="02_SQL/WI39_Coding.Datenbankscripts.sql"
+warFile="03_Middleware/ROOT.war"
+
+JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+CATALINA_HOME="/usr/share/$tomcat_version"
+CATALINA_BASE="/var/lib/$tomcat_version"
+
 
 if [ "$EUID" -ne 0 ] ; then
 	echo "Please run as root"
@@ -24,7 +32,7 @@ debconf-set-selections <<< "debconf shared/accepted-oracle-license-v1-1 select t
 debconf-set-selections <<< "debconf shared/accepted-oracle-license-v1-1 seen true"
 apt-get -y -qqq install $java_version > /dev/null
 
-export JAVA_HOME="$java_home"
+export JAVA_HOME
 
 javainstall=$(dpkg --list | grep $java_version | wc -l)
 if [ $javainstall -lt 1 ] ; then
@@ -37,6 +45,15 @@ adduser --quiet --system --shell /bin/bash --gecos 'Tomcat Java Servlet and JSP 
 
 echo "installing $tomcat_version..."
 apt-get -y -qq install $tomcat_version > /dev/null
+
+export CATALINA_HOME
+echo "export CATALINA_BASE=$CATALINA_BASE" >> $CATALINA_HOME/bin/setenv.sh
+chown $tomcat_version:$tomcat_version $CATALINA_HOME/bin/setenv.sh
+chmod a+x $CATALINA_HOME/bin/setenv.sh
+mkdir $CATALINA_BASE/temp
+chown $tomcat_version:$tomcat_version $CATALINA_BASE/temp
+
+
 
 tomcatinstall=$(dpkg --list | grep $tomcat-version | wc -l)
 if [ $tomcatinstall -lt 1 ] ; then
@@ -55,7 +72,21 @@ if [ $mysqlinstall -lt 1 ] ; then
 	exit 1; 
 fi
 
-echo "adding test data to database mydb..."
-mysql --user=root --password=eshh < 02_SQL/WI39_Coding.Datenbankscripts.sql
+ip=$(hostname -I)
+echo "bind-address 	= $ip" > /etc/mysql/conf.d/wakeuplight.cnf
 
+echo "adding test data to database mydb..."
+mysql --user=root --password=eshh < $sqlFile
+
+rm -rf $CATALINA_BASE/webapps/$context
+rm -rf $CATALINA_BASE/webapps/$context.war
+cp $warFile $CATALINA_BASE/webapps/$context.war
+chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
+
+systemctl restart $tomcat_version
+
+### summary
+echo "All finished!"
+echo "MySQL ist available at $ip on port 3306, use the wakeuplight user!"
+echo "REST API is available at $ip:8080/rest/"
 
