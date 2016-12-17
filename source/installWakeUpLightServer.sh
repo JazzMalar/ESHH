@@ -95,7 +95,8 @@ if ! isInstalled $mysql_version ; then
 fi
 
 ip=$(hostname -I)
-echo "bind-address 	= $ip" > /etc/mysql/conf.d/wakeuplight.cnf
+echo "[wakeuplight]"	> /etc/mysql/conf.d/wakeuplight.cnf
+echo "bind-address 	= $ip" >> /etc/mysql/conf.d/wakeuplight.cnf
 
 echo "adding test data to database mydb..."
 mysql --user=root --password=eshh < $sqlFile
