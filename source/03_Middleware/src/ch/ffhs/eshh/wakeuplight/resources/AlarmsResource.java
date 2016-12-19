@@ -1,6 +1,5 @@
 package ch.ffhs.eshh.wakeuplight.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -11,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import ch.ffhs.eshh.wakeuplight.data.DBProxyFactory;
 import ch.ffhs.eshh.wakeuplight.model.Alarm;
-import ch.ffhs.eshh.wakeuplight.model.WakeUpLightDAO;
 
 @Path("/alarms")
 public class AlarmsResource
@@ -29,9 +28,7 @@ public class AlarmsResource
 	@Produces(MediaType.TEXT_XML)
 	public List<Alarm> getAlarmsBrowser()
 	{
-		List<Alarm> alarms = new ArrayList<Alarm>();
-		alarms.addAll(WakeUpLightDAO.instance.getAlarms().values());
-
+		List<Alarm> alarms = DBProxyFactory.factory.g().GetAllAlarms();
 		return alarms;
 	}
 

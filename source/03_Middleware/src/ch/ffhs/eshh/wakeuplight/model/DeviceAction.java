@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DeviceAction
 {
 	private String stringId;
-	private int id;
+	private int deviceActionId;
 	private int n;
 	private List<DeviceActionField> fields;
 
@@ -17,10 +17,9 @@ public class DeviceAction
 
 	}
 
-	public DeviceAction(String stringId, int id, int n, List<DeviceActionField> fields)
+	public DeviceAction(String stringId, int n, List<DeviceActionField> fields)
 	{
 		this.stringId = stringId;
-		this.id = id;
 		this.n = n;
 		this.fields = fields;
 	}
@@ -35,14 +34,14 @@ public class DeviceAction
 		this.stringId = stringId;
 	}
 
-	public int getId()
+	public int getDeviceActionId()
 	{
-		return id;
+		return deviceActionId;
 	}
 
-	public void setId(int id)
+	public void setDeviceActionId(int deviceActionId)
 	{
-		this.id = id;
+		this.deviceActionId = deviceActionId;
 	}
 
 	public int getN()

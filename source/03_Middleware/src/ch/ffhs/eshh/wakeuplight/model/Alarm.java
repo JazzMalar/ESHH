@@ -1,15 +1,16 @@
 package ch.ffhs.eshh.wakeuplight.model;
 
-import java.time.LocalTime;
+import java.sql.Time;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Alarm
 {
-	private LocalTime startTime;
+	private int alarmId;
+	private Time startTime;
 	private int offset;
-	private String repeatPatter;
+	private String repeatPattern;
 	private Boolean enabled;
 	private int actionGroup;
 
@@ -18,21 +19,31 @@ public class Alarm
 
 	}
 
-	public Alarm(LocalTime startTime, int offset, String repeatPatter, Boolean enabled, int actionGroup)
+	public Alarm(Time startTime, int offset, String repeatPattern, Boolean enabled, int actionGroup)
 	{
 		this.startTime = startTime;
 		this.offset = offset;
-		this.repeatPatter = repeatPatter;
+		this.repeatPattern = repeatPattern;
 		this.enabled = enabled;
 		this.actionGroup = actionGroup;
 	}
 
-	public LocalTime getStartTime()
+	public int getAlarmId()
+	{
+		return alarmId;
+	}
+
+	public void setAlarmId(int alarmId)
+	{
+		this.alarmId = alarmId;
+	}
+
+	public Time getStartTime()
 	{
 		return startTime;
 	}
 
-	public void setStartTime(LocalTime startTime)
+	public void setStartTime(Time startTime)
 	{
 		this.startTime = startTime;
 	}
@@ -47,14 +58,14 @@ public class Alarm
 		this.offset = offset;
 	}
 
-	public String getRepeatPatter()
+	public String getRepeatPattern()
 	{
-		return repeatPatter;
+		return repeatPattern;
 	}
 
-	public void setRepeatPatter(String repeatPatter)
+	public void setRepeatPattern(String repeatPattern)
 	{
-		this.repeatPatter = repeatPatter;
+		this.repeatPattern = repeatPattern;
 	}
 
 	public Boolean getEnabled()

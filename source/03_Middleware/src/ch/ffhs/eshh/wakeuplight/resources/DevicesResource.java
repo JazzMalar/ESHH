@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import ch.ffhs.eshh.wakeuplight.data.DBProxyFactory;
 import ch.ffhs.eshh.wakeuplight.model.Device;
-import ch.ffhs.eshh.wakeuplight.model.WakeUpLightDAO;
 
 @Path("/devices")
 public class DevicesResource
@@ -28,20 +28,24 @@ public class DevicesResource
 	// Return the list of todos to the user in the browser
 	@GET
 	@Produces(MediaType.TEXT_XML)
-	public List<Device> getDevicesBrowser(@QueryParam("StringID") String stringId)
+	public List<Device> getDevicesBrowser(@QueryParam("StringID") String stringId, @QueryParam("DeviceID") int deviceId)
 	{
 		List<Device> devices = new ArrayList<Device>();
 
 		if (stringId != null && stringId.length() > 0)
 		{
-			if (WakeUpLightDAO.instance.getDevices().containsKey(stringId))
-			{
-				devices.add(WakeUpLightDAO.instance.getDevices().get(stringId));
-			}
+			devices.add(DBProxyFactory.factory.g().GetDevice(stringId));
 		}
 		else
 		{
-			devices.addAll(WakeUpLightDAO.instance.getDevices().values());
+			if (deviceId > 0)
+			{
+				devices.add(DBProxyFactory.factory.g().GetDevice(deviceId));
+			}
+			else
+			{
+				devices = (DBProxyFactory.factory.g().GetAllDevices());
+			}
 		}
 
 		return devices;

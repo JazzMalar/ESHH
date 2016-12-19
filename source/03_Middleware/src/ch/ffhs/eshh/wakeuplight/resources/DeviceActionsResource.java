@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import ch.ffhs.eshh.wakeuplight.data.DBProxyFactory;
 import ch.ffhs.eshh.wakeuplight.model.DeviceAction;
-import ch.ffhs.eshh.wakeuplight.model.WakeUpLightDAO;
 
 @Path("/deviceactions")
 public class DeviceActionsResource
@@ -28,16 +28,14 @@ public class DeviceActionsResource
 	// Return the list of todos to the user in the browser
 	@GET
 	@Produces(MediaType.TEXT_XML)
-	public List<DeviceAction> getDeviceActionsBrowser(@QueryParam("StringID") String stringId)
+	public List<DeviceAction> getDeviceActionsBrowser(@QueryParam("StringID") String stringId,
+	        @QueryParam("ID") int deviceActionId)
 	{
 		List<DeviceAction> deviceActions = new ArrayList<DeviceAction>();
 
-		if (stringId != null && stringId.length() > 0)
+		if (stringId != null && stringId.length() > 0 && deviceActionId > 0)
 		{
-			if (WakeUpLightDAO.instance.getDeviceActions().containsKey(stringId))
-			{
-				deviceActions.add(WakeUpLightDAO.instance.getDeviceActions().get(stringId));
-			}
+			deviceActions.add(DBProxyFactory.factory.g().GetDeviceAction(stringId, deviceActionId));
 		}
 
 		return deviceActions;

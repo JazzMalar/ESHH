@@ -1,11 +1,11 @@
 package ch.ffhs.eshh.wakeuplight.model;
 
-public class DeviceActionField<T>
+public class DeviceActionField
 {
 	private String fieldName;
-	private T fieldValue;
+	private String fieldValue;
 
-	public DeviceActionField(String fieldName, T fieldValue)
+	public DeviceActionField(String fieldName, String fieldValue)
 	{
 		this.fieldName = fieldName;
 		this.fieldValue = fieldValue;
@@ -21,12 +21,12 @@ public class DeviceActionField<T>
 		this.fieldName = fieldName;
 	}
 
-	public T getFieldValue()
+	public String getFieldValue()
 	{
 		return fieldValue;
 	}
 
-	public void setFieldValue(T fieldValue)
+	public void setFieldValue(String fieldValue)
 	{
 		this.fieldValue = fieldValue;
 	}

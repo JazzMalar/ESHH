@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import ch.ffhs.eshh.wakeuplight.data.DBProxyFactory;
 import ch.ffhs.eshh.wakeuplight.model.ActionGroupMember;
-import ch.ffhs.eshh.wakeuplight.model.WakeUpLightDAO;
 
 @Path("/actiongroupmembers")
 public class ActionGroupMembersResource
@@ -31,10 +31,7 @@ public class ActionGroupMembersResource
 	public List<ActionGroupMember> getActionGroupMembersBrowser(@QueryParam("GroupID") int groupId)
 	{
 		List<ActionGroupMember> actionGroupMembers = new ArrayList<ActionGroupMember>();
-		if (WakeUpLightDAO.instance.getActionGroupMembers().containsKey(groupId))
-		{
-			actionGroupMembers.add(WakeUpLightDAO.instance.getActionGroupMembers().get(groupId));
-		}
+		actionGroupMembers.addAll(DBProxyFactory.factory.g().GetActionGroup(groupId).getMembers());
 		return actionGroupMembers;
 	}
 

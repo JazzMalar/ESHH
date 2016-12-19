@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ActionGroupMember
 {
+	private int actionGroupMemberId;
 	private int groupId;
 	private int deviceId;
 	private int actionId;
@@ -21,6 +22,16 @@ public class ActionGroupMember
 		this.deviceId = deviceId;
 		this.actionId = actionId;
 		this.offset = offset;
+	}
+
+	public int getActionGroupMemberId()
+	{
+		return actionGroupMemberId;
+	}
+
+	public void setActionGroupMemberId(int actionGroupMemberId)
+	{
+		this.actionGroupMemberId = actionGroupMemberId;
 	}
 
 	public int getGroupId()

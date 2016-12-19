@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Device
 {
+	private int deviceId;
 	private String name;
 	private String stringId;
 	private Boolean gpio;
@@ -19,6 +20,16 @@ public class Device
 		this.name = name;
 		this.stringId = stringId;
 		this.gpio = gpio;
+	}
+
+	public int getDeviceId()
+	{
+		return deviceId;
+	}
+
+	public void setDeviceId(int deviceId)
+	{
+		this.deviceId = deviceId;
 	}
 
 	public String getName()
