@@ -76,6 +76,8 @@ if ! isInstalled $tomcat_version ; then
   mkdir $CATALINA_BASE/temp
   chown $tomcat_version:$tomcat_version $CATALINA_BASE/temp
 
+  sed -i "s:#JAVA_HOME=.*:JAVA_HOME=$JAVA_HOME:" /etc/default/$tomcat_version
+
   if ! isInstalled $tomcat_version  ; then
 	echo "Could not install $tomcat_version. Aborting."
 	exit 1; 
