@@ -57,6 +57,13 @@ class alarm:
         now = self.calculateMins(self.getNow())
         startTime = self.calculateMins(self.startTime)
         calculatedTime = startTime - now
-        print calculatedTime
+        print "Zeit zu warten bis timer startet: "+str(calculatedTime)
         return calculatedTime
 
+    def getIsWeekdayTrue(self,weekday):
+        # 0 = Montag
+        if (weekday < len(self.repeatPatternArr)):
+            return self.repeatPatternArr[weekday]
+        else:
+            #besser nicht einschalten
+            return False

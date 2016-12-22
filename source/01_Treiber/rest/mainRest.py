@@ -1,6 +1,6 @@
 from c_api import callApi
 from c_alarm import alarm
-import sys
+import sys, datetime
 
 sys.path.append('../')
 from configparser import readConfig
@@ -21,10 +21,12 @@ for al in alarms.checkAlarms(alarms.getArray()):
 
 for al in alarmObj:
     if al.getIsActive():
-        print "active: \n"
-        if(int(al.getMinsToWait()) == 0):
-            print "timer starten"
-
+        if al.getIsWeekdayTrue(int(datetime.datetime.today().weekday())):
+            print "Timer aktiv, Wochentag aktiv"
+            if(int(al.getMinsToWait()) == 0):
+                print "timer starten"
+        else :
+            print "Timer aktiv, Wochentag inaktiv"
     else:
-        print "inactive: \n"
+        print "Timer inaktiv\n"
 
