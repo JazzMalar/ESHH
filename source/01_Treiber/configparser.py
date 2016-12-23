@@ -29,6 +29,6 @@ class readConfig:
 # print test
 
 
-config = readConfig("Config/treiberConfig.txt","treiber-config")
-config.printAllConfig()
-print config.getConfigParam("striptype")
+#config = readConfig("Config/treiberConfig.txt","treiber-config")
+#config.printAllConfig()
+#print config.getConfigParam("striptype")
