@@ -17,9 +17,9 @@ public interface IDBProxy
 
 	void RemoveActionGroup(int groupId);
 
-	void RemoveActionGroupMember(int groupId, int memberId);
+	void RemoveActionGroupMember(int groupId, int deviceId);
 
-	void RemoveActionGroupMemberFromAllGroups(int memberId);
+	void RemoveActionGroupMemberFromAllGroups(int deviceId);
 
 	DeviceAction GetDeviceAction(String stringId, int id);
 

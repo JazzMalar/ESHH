@@ -1,0 +1,29 @@
+
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Form to create a new Alarm</title>
+ </head>
+<body>
+        <form action="../api/alarms" method="POST">
+        <label for="startTime">StartTime</label>
+        <input name="startTime" type="time" />
+        <br/>
+        <label for="offset">Offset</label>
+        <input name="offset" type="number" />
+		<br/>
+        <label for="repeatPattern">Repeat Pattern</label>
+        <input name="repeatPattern" type="text" width="7" />
+		<br/>
+        <label for="enabled">Aktiv</label>
+        <input name="enabled" type="checkbox" />
+		<br/>
+        <label for="actionGroup">Action Group ID</label>
+        <input name="actionGroup" type="number" />
+		
+        <br/>
+        <input type="submit" value="Submit" />
+        </form>
+</body>
+</html>
