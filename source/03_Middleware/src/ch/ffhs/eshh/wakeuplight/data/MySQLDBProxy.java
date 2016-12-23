@@ -163,7 +163,7 @@ public class MySQLDBProxy implements IDBProxy
 		}
 		catch (Exception e)
 		{
-
+			System.out.println("Fehler: " + e.getMessage());
 		}
 
 		return alarm;
