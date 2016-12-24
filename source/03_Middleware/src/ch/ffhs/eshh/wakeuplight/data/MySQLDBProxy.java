@@ -180,7 +180,7 @@ public class MySQLDBProxy implements IDBProxy
 		for (DeviceActionField field : deviceAction.getFields())
 		{
 			fields += field.getFieldName() + ",";
-			values += field.getFieldValue() + ",";
+			values += "'" + field.getFieldValue() + "',";
 		}
 
 		fields = fields.substring(0, fields.length() - 1);

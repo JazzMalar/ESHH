@@ -1,9 +1,14 @@
 package ch.ffhs.eshh.wakeuplight.resources;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -49,6 +54,21 @@ public class DevicesResource
 		}
 
 		return devices;
+	}
+
+	@POST
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void newDevice(@FormParam("Name") String deviceName, @FormParam("StringID") String stringId,
+	        @FormParam("GPIO") String gpioString, @Context HttpServletResponse servletResponse) throws IOException
+	{
+
+		boolean gpio = gpioString.equals("true") ? true : false;
+
+		Device device = new Device(deviceName, stringId, gpio);
+		DBProxyFactory.factory.g().AddDevice(device);
+
+		servletResponse.sendRedirect("../create_device.html");
 	}
 
 }

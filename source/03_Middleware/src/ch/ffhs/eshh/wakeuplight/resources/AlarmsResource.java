@@ -43,7 +43,7 @@ public class AlarmsResource
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void newTodo(@FormParam("startTime") String startTimeString, @FormParam("offset") int offset,
+	public void newAlarm(@FormParam("startTime") String startTimeString, @FormParam("offset") int offset,
 	        @FormParam("repeatPattern") String repeatPattern, @FormParam("enabled") String enabledString,
 	        @FormParam("actionGroup") int actionGroup, @Context HttpServletResponse servletResponse) throws IOException
 	{
@@ -58,7 +58,7 @@ public class AlarmsResource
 			System.out.println("Datum hat ein falsches Format." + e.getMessage());
 		}
 
-		boolean enabled = enabledString.equals("on") ? true : false;
+		boolean enabled = enabledString.equals("true") ? true : false;
 
 		Alarm alarm = new Alarm(startTime, offset, repeatPattern, enabled, actionGroup);
 		DBProxyFactory.factory.g().AddAlarm(alarm);

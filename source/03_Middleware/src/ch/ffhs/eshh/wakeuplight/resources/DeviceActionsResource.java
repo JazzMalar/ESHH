@@ -1,19 +1,25 @@
 package ch.ffhs.eshh.wakeuplight.resources;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
 import ch.ffhs.eshh.wakeuplight.data.DBProxyFactory;
 import ch.ffhs.eshh.wakeuplight.model.DeviceAction;
+import ch.ffhs.eshh.wakeuplight.model.DeviceActionField;
 
 @Path("/deviceactions")
 public class DeviceActionsResource
@@ -27,7 +33,7 @@ public class DeviceActionsResource
 
 	// Return the list of todos to the user in the browser
 	@GET
-	@Produces(MediaType.TEXT_XML)
+	@Produces({ MediaType.TEXT_XML, "application/json" })
 	public List<DeviceAction> getDeviceActionsBrowser(@QueryParam("StringID") String stringId,
 	        @QueryParam("ID") int deviceActionId)
 	{
@@ -41,4 +47,26 @@ public class DeviceActionsResource
 		return deviceActions;
 	}
 
+	@POST
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void newDeviceAction(final MultivaluedMap<String, String> formParams,
+	        @Context HttpServletResponse servletResponse) throws IOException
+	{
+
+		String stringId = formParams.get("StringID").get(0);
+		int n = Integer.parseInt(formParams.get("N").get(0));
+		List<DeviceActionField> actionFields = new ArrayList<DeviceActionField>();
+
+		for (int i = 1; i <= n; i++)
+		{
+			actionFields.add(new DeviceActionField(formParams.get("FieldName" + i).get(0),
+			        formParams.get("FieldValue" + i).get(0)));
+		}
+
+		DeviceAction deviceAction = new DeviceAction(stringId, n, actionFields);
+		DBProxyFactory.factory.g().AddDeviceAction(deviceAction);
+
+		servletResponse.sendRedirect("../create_deviceAction.html");
+	}
 }
