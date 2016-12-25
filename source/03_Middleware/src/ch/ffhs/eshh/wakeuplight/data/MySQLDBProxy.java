@@ -17,6 +17,7 @@ import ch.ffhs.eshh.wakeuplight.model.ActionGroupMember;
 import ch.ffhs.eshh.wakeuplight.model.Alarm;
 import ch.ffhs.eshh.wakeuplight.model.Device;
 import ch.ffhs.eshh.wakeuplight.model.DeviceAction;
+import ch.ffhs.eshh.wakeuplight.model.DeviceActionField;
 
 public class MySQLDBProxy implements IDBProxy
 {
@@ -90,28 +91,61 @@ public class MySQLDBProxy implements IDBProxy
 	@Override
 	public void AddActionGroup(ActionGroup actionGroup)
 	{
-		// TODO Auto-generated method stub
+		for (ActionGroupMember groupMember : actionGroup.getMembers())
+		{
+			try
+			{
+				run.update("insert into ActionGroupMember (idGroup, idDevice, idAction, Offset) VALUES (?,?,?,?)",
+				        actionGroup.getGroupId(), groupMember.getDeviceId(), groupMember.getActionId(),
+				        groupMember.getOffset());
+			}
+			catch (Exception e)
+			{
+				System.out.println("Fehler beim Insert" + e.getMessage());
+			}
+		}
 
 	}
 
 	@Override
 	public void RemoveActionGroup(int groupId)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			run.update("delete from ActionGroupMember WHERE idGroup = ?", groupId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 
 	}
 
 	@Override
-	public void RemoveActionGroupMember(int groupId, int memberId)
+	public void RemoveActionGroupMember(int groupId, int deviceId)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			run.update("delete from ActionGroupMember WHERE idGroup = ? and idDevice = ?", groupId, deviceId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 
 	}
 
 	@Override
-	public void RemoveActionGroupMemberFromAllGroups(int memberId)
+	public void RemoveActionGroupMemberFromAllGroups(int deviceId)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			run.update("delete from ActionGroupMember WHERE idDevice = ?", deviceId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 
 	}
 
@@ -138,14 +172,43 @@ public class MySQLDBProxy implements IDBProxy
 	@Override
 	public void AddDeviceAction(DeviceAction deviceAction)
 	{
-		// TODO Auto-generated method stub
+
+		String tableName = "DeviceAction_" + deviceAction.getStringId();
+		String fields = "";
+		String values = "";
+
+		for (DeviceActionField field : deviceAction.getFields())
+		{
+			fields += field.getFieldName() + ",";
+			values += "'" + field.getFieldValue() + "',";
+		}
+
+		fields = fields.substring(0, fields.length() - 1);
+		values = values.substring(0, values.length() - 1);
+
+		try
+		{
+			run.update("insert into " + tableName + " (" + fields + ") VALUES (" + values + ")");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Insert" + e.getMessage());
+		}
 
 	}
 
 	@Override
 	public void RemoveDeviceAction(String stringId, int id)
 	{
-		// TODO Auto-generated method stub
+		String tableName = "DeviceAction_" + stringId;
+		try
+		{
+			run.update("delete from " + tableName + " WHERE idDeviceAction = ?", id);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 
 	}
 
@@ -163,7 +226,7 @@ public class MySQLDBProxy implements IDBProxy
 		}
 		catch (Exception e)
 		{
-
+			System.out.println("Fehler: " + e.getMessage());
 		}
 
 		return alarm;
@@ -189,14 +252,31 @@ public class MySQLDBProxy implements IDBProxy
 	@Override
 	public void AddAlarm(Alarm newAlarm)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			run.update("insert into Alarm (startTime, repeatPattern, active, idActionGroup) VALUES (?,?,?,?)",
+			        newAlarm.getStartTime(), newAlarm.getRepeatPattern(), newAlarm.getEnabled(),
+			        newAlarm.getActionGroup());
+			;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Insert" + e.getMessage());
+		}
 
 	}
 
 	@Override
 	public void RemoveAlarm(int alarmId)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			run.update("delete from Alarm WHERE idTask = ?", alarmId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 
 	}
 
@@ -256,22 +336,42 @@ public class MySQLDBProxy implements IDBProxy
 	@Override
 	public void AddDevice(Device newDevice)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			run.update("insert into Device (name, stringId, gpio) VALUES (?,?,?)", newDevice.getName(),
+			        newDevice.getStringId(), newDevice.getGpio());
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Insert" + e.getMessage());
+		}
 
 	}
 
 	@Override
 	public void RemoveDevice(String stringId)
 	{
-		// TODO Auto-generated method stub
-
+		try
+		{
+			run.update("delete from Device WHERE stringId = ?", stringId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 	}
 
 	@Override
 	public void RemoveDevice(int deviceId)
 	{
-		// TODO Auto-generated method stub
-
+		try
+		{
+			run.update("delete from Device WHERE idDevice = ?", deviceId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
 	}
 
 	@Override

@@ -1,0 +1,26 @@
+
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Form to add a new ActionGroupMember</title>
+ </head>
+<body>
+        <form action="../api/actiongroupmembers" method="POST">
+        <label for="GroupID">GroupID</label>
+        <input name="GroupID" type="number" />
+		<br/>
+        <label for="DeviceID">DeviceID</label>
+        <input name="DeviceID" type="number" />
+        <br/>
+        <label for="ActionID">ActionID</label>
+        <input name="ActionID" type="number" />
+        <br/>
+        <label for="Offset">Offset</label>
+        <input name="Offset" type="number" />
+        <br/>
+        <br/>
+        <input type="submit" value="Submit" />
+        </form>
+</body>
+</html>

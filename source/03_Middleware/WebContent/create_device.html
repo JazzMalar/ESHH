@@ -1,0 +1,24 @@
+
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Form to create a new Device</title>
+ </head>
+<body>
+        <form action="../api/devices" method="POST">
+        <label for="Name">Device name</label>
+        <input name="Name" type="text" />
+        <br/>
+        <label for="StringID">String ID</label>
+        <input name="StringID" type="text" />
+		<br/>
+        <label for="GPIO">Wird &uuml;ber GPIO angesprochen?</label>
+        <input name="GPIO" type="checkbox" value="true" />
+		<br/>
+		
+        <br/>
+        <input type="submit" value="Submit" />
+        </form>
+</body>
+</html>

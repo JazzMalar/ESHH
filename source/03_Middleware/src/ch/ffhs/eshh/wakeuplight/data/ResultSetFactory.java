@@ -111,7 +111,7 @@ public enum ResultSetFactory
 				{
 					Alarm alarm = new Alarm();
 					alarm.setAlarmId(rs.getInt(1));
-					alarm.setStartTime(rs.getTime(2));
+					alarm.setStartTime(rs.getTimestamp(2));
 					alarm.setRepeatPattern(rs.getString(3));
 					alarm.setEnabled(rs.getBoolean(4));
 					alarm.setActionGroup(rs.getInt(5));

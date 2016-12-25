@@ -1,6 +1,6 @@
 package ch.ffhs.eshh.wakeuplight.model;
 
-import java.sql.Time;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Alarm
 {
 	private int alarmId;
-	private Time startTime;
+	private Date startTime;
 	private int offset;
 	private String repeatPattern;
 	private Boolean enabled;
@@ -19,7 +19,7 @@ public class Alarm
 
 	}
 
-	public Alarm(Time startTime, int offset, String repeatPattern, Boolean enabled, int actionGroup)
+	public Alarm(Date startTime, int offset, String repeatPattern, Boolean enabled, int actionGroup)
 	{
 		this.startTime = startTime;
 		this.offset = offset;
@@ -38,12 +38,12 @@ public class Alarm
 		this.alarmId = alarmId;
 	}
 
-	public Time getStartTime()
+	public Date getStartTime()
 	{
-		return startTime;
+		return this.startTime;
 	}
 
-	public void setStartTime(Time startTime)
+	public void setStartTime(Date startTime)
 	{
 		this.startTime = startTime;
 	}
