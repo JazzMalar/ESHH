@@ -22,19 +22,18 @@ public class NightlightsResource
 	@GET
 	@Path("/activate")
 	@Produces(MediaType.TEXT_XML)
-	public void activateNightlight(@QueryParam("StringID") String stringId)
+	public int activateNightlight(@QueryParam("StringID") String stringId)
 	{
-		// todo: implement
+		return 0;
 
 	}
 
 	@GET
 	@Path("/disable")
 	@Produces(MediaType.TEXT_XML)
-	public void disableNightlight(@QueryParam("StringID") String stringID)
+	public int disableNightlight(@QueryParam("StringID") String stringID)
 	{
-		// todo: implement
-
+		return 0;
 	}
 
 }

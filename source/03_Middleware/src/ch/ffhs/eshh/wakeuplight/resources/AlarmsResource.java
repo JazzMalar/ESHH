@@ -3,16 +3,19 @@ package ch.ffhs.eshh.wakeuplight.resources;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -34,9 +37,19 @@ public class AlarmsResource
 	// Return the list of todos to the user in the browser
 	@GET
 	@Produces(MediaType.TEXT_XML)
-	public List<Alarm> getAlarmsBrowser()
+	public List<Alarm> getAlarmsBrowser(@QueryParam("AlarmID") int alarmId)
 	{
-		List<Alarm> alarms = DBProxyFactory.factory.g().GetAllAlarms();
+		List<Alarm> alarms = new ArrayList<Alarm>();
+		if (alarmId > 0)
+		{
+			Alarm t = DBProxyFactory.factory.g().GetAlarm(alarmId);
+			if (t.getAlarmId() > 0)
+				alarms.add(t);
+		}
+		else
+		{
+			alarms.addAll(DBProxyFactory.factory.g().GetAllAlarms());
+		}
 		return alarms;
 	}
 
@@ -64,6 +77,14 @@ public class AlarmsResource
 		DBProxyFactory.factory.g().AddAlarm(alarm);
 
 		servletResponse.sendRedirect("../create_alarm.html");
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_XML)
+	public void deleteAlarm(@QueryParam("ID") int alarmId, @Context HttpServletResponse servletResponse)
+	        throws IOException
+	{
+		DBProxyFactory.factory.g().RemoveAlarm(alarmId);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,10 +39,13 @@ public class DeviceActionsResource
 	        @QueryParam("ID") int deviceActionId)
 	{
 		List<DeviceAction> deviceActions = new ArrayList<DeviceAction>();
+		DeviceAction t = null;
 
 		if (stringId != null && stringId.length() > 0 && deviceActionId > 0)
 		{
-			deviceActions.add(DBProxyFactory.factory.g().GetDeviceAction(stringId, deviceActionId));
+			t = DBProxyFactory.factory.g().GetDeviceAction(stringId, deviceActionId);
+			if (t.getDeviceActionId() > 0)
+				deviceActions.add(t);
 		}
 
 		return deviceActions;
@@ -68,5 +72,13 @@ public class DeviceActionsResource
 		DBProxyFactory.factory.g().AddDeviceAction(deviceAction);
 
 		servletResponse.sendRedirect("../create_deviceAction.html");
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_XML)
+	public void deleteDeviceAction(@QueryParam("StringID") String stringId, @QueryParam("ID") int id,
+	        @Context HttpServletResponse servletResponse) throws IOException
+	{
+		DBProxyFactory.factory.g().RemoveDeviceAction(stringId, id);
 	}
 }
