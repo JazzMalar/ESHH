@@ -55,7 +55,7 @@ class callApi:
 
     def checkAlarms(self,arr):
         for dict in arr:
-            if "start" not in dict:
+            if "startTime" not in dict:
                 print "start not in dict"
                 dict["startTime"]="21:03"
 

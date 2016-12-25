@@ -68,7 +68,12 @@ class LEDStrip(object):
             print "["+str(i)+"] RGB "+str(hex(led.getR()))+"/"+str(hex(led.getG()))+"/"+str(hex(led.getB()))+" Prio: "+str(led.getPrio())+" usedBy: "+str(led.getUsedBy())
 
     def __setStripType(self,type):
-        self.stripType = type
+        if "ws2801" in type.lower():
+            self.stripType = "WS2801"
+        elif "lpd6803" in type.lower():
+            self.stripType = "LPD6803"
+        else:
+            self.stripType = "WS2801"
 
     def __getStripType(self):
         return self.stripType
