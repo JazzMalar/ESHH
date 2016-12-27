@@ -115,3 +115,8 @@ echo "All finished!"
 echo "MySQL ist available at $ip on port 3306, use the wakeuplight user!"
 echo "REST API is available at $ip:8080/rest/"
 
+echo "install python pip and xmltodict"
+sudo apt-get install python-pip
+sudo pip install xmltodict
+
+

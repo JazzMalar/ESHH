@@ -40,9 +40,9 @@ class callApi:
                 for child in dom.childNodes:
                     dict = self.readOut(child)
                     if bool(dict):
-                        # print dict
+                        print dict
                         bigdict.update(dict)
-                        # print bigdict
+                        print bigdict
                 return bigdict
         else:
             try:

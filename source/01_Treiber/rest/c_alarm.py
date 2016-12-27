@@ -2,24 +2,31 @@ import datetime
 
 
 class alarm:
-    def __init__(self,startTime,repeatPattern,idTask,active,idActivationGroup):
-        self.updateAlarm(startTime,repeatPattern,idTask,active,idActivationGroup)
+    def __init__(self, startTime, repeatPattern, alarmId, active, idActivationGroup, offset):
+        self.updateAlarm(startTime, repeatPattern, alarmId, active, idActivationGroup, offset)
 
     def getIsActive(self):
         return self.active
 
-    def updateAlarm(self,startTime,repeatPattern,idTask,active,idActivationGroup):
+    def updateAlarm(self,startTime,repeatPattern,alarmId,active,idActivationGroup,offset):
         self.startTime = startTime[-9:-4] # Nur Zeit aus startTime auslesen 1970-01-01T08:00:00Z
         self.repeatPattern = repeatPattern
-        self.idTask = int(idTask)
+        self.alarmId = int(alarmId)
         self.active = bool(active)
         self.idActivationGroup = idActivationGroup
+        self.offset = offset
 
         #updateFkts
         self.updateRepeatPattern(self.repeatPattern)
 
-    def getIdTask(self):
-        return self.idTask
+    def getIdAlarm(self):
+        return self.alarmId
+
+    def getOffset(self):
+        return self.offset
+
+    def getIdActivationGroup(self):
+        return self.idActivationGroup
 
    # def updateIsActive(self,active):
         # if active == "true":
