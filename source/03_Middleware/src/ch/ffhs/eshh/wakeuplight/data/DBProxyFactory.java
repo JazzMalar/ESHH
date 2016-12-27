@@ -12,7 +12,7 @@ public enum DBProxyFactory
 	{
 		try
 		{
-			dbProxy = new MySQLDBProxy("localhost", "mydb", "wakeuplight", "wakeuplight");
+			dbProxy = new MySQLDBProxy("vaspberrypi", "mydb", "wakeuplight", "wakeuplight");
 		}
 		catch (Exception e)
 		{

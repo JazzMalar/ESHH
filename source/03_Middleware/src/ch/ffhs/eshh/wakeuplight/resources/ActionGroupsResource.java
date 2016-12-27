@@ -22,18 +22,18 @@ public class ActionGroupsResource
 	@GET
 	@Path("/activate")
 	@Produces(MediaType.TEXT_XML)
-	public void activateActionGroup(@QueryParam("GroupID") String groupId)
+	public int activateActionGroup(@QueryParam("GroupID") String groupId)
 	{
-		// todo: implement
+		return 0;
 
 	}
 
 	@GET
 	@Path("/disable")
 	@Produces(MediaType.TEXT_XML)
-	public void disableActionGroup(@QueryParam("GroupID") String groupId)
+	public int disableActionGroup(@QueryParam("GroupID") String groupId)
 	{
-		// todo: implement
+		return 0;
 
 	}
 

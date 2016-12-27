@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,16 +37,21 @@ public class DevicesResource
 	public List<Device> getDevicesBrowser(@QueryParam("StringID") String stringId, @QueryParam("DeviceID") int deviceId)
 	{
 		List<Device> devices = new ArrayList<Device>();
+		Device t = null;
 
 		if (stringId != null && stringId.length() > 0)
 		{
-			devices.add(DBProxyFactory.factory.g().GetDevice(stringId));
+			t = DBProxyFactory.factory.g().GetDevice(stringId);
+			if (t.getDeviceId() > 0)
+				devices.add(t);
 		}
 		else
 		{
 			if (deviceId > 0)
 			{
-				devices.add(DBProxyFactory.factory.g().GetDevice(deviceId));
+				t = DBProxyFactory.factory.g().GetDevice(deviceId);
+				if (t.getDeviceId() > 0)
+					devices.add(t);
 			}
 			else
 			{
@@ -71,4 +77,18 @@ public class DevicesResource
 		servletResponse.sendRedirect("../create_device.html");
 	}
 
+	@DELETE
+	@Produces(MediaType.APPLICATION_XML)
+	public void deleteDevice(@QueryParam("StringID") String stringId, @QueryParam("ID") int deviceId,
+	        @Context HttpServletResponse servletResponse) throws IOException
+	{
+		if (stringId != null && stringId.length() > 0)
+		{
+			DBProxyFactory.factory.g().RemoveDevice(stringId);
+		}
+		else if (deviceId > 0)
+		{
+			DBProxyFactory.factory.g().RemoveDevice(deviceId);
+		}
+	}
 }

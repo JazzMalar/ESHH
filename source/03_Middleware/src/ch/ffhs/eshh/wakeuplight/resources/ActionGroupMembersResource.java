@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -37,7 +38,16 @@ public class ActionGroupMembersResource
 	public List<ActionGroupMember> getActionGroupMembersBrowser(@QueryParam("GroupID") int groupId)
 	{
 		List<ActionGroupMember> actionGroupMembers = new ArrayList<ActionGroupMember>();
-		actionGroupMembers.addAll(DBProxyFactory.factory.g().GetActionGroup(groupId).getMembers());
+		ActionGroup g = null;
+
+		if (groupId > 0)
+		{
+			g = DBProxyFactory.factory.g().GetActionGroup(groupId);
+			if (g != null && g.getGroupId() > 0)
+			{
+				actionGroupMembers.addAll(g.getMembers());
+			}
+		}
 		return actionGroupMembers;
 	}
 
@@ -56,5 +66,30 @@ public class ActionGroupMembersResource
 		DBProxyFactory.factory.g().AddActionGroup(actionGroup);
 
 		servletResponse.sendRedirect("../add_actionGroupMember.html");
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_XML)
+	public void deleteActionGroupMember(@QueryParam("GroupID") int groupId, @QueryParam("DeviceID") int deviceId,
+	        @Context HttpServletResponse servletResponse) throws IOException
+	{
+		if (deviceId > 0)
+		{
+			if (groupId > 0)
+			{
+				DBProxyFactory.factory.g().RemoveActionGroupMember(groupId, deviceId);
+			}
+			else
+			{
+				DBProxyFactory.factory.g().RemoveActionGroupMemberFromAllGroups(deviceId);
+			}
+		}
+		else
+		{
+			if (groupId > 0)
+			{
+				DBProxyFactory.factory.g().RemoveActionGroup(groupId);
+			}
+		}
 	}
 }

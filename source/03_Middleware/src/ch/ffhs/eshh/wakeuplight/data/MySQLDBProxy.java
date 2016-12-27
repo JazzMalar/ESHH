@@ -47,7 +47,7 @@ public class MySQLDBProxy implements IDBProxy
 			        "SELECT idActionGroupMember, idGroup, idDevice, idAction, offset from ActionGroupMember WHERE idGroup = ?",
 			        ResultSetFactory.factory.AGMResultHandler(), groupId);
 
-			actionGroup.setGroupId(groupId);
+			actionGroup.setGroupId(agms.get(0).getGroupId());
 			actionGroup.setMembers(agms);
 		}
 		catch (Exception e)
