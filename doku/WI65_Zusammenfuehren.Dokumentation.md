@@ -85,27 +85,34 @@ Um zur Steuerung des WakeUp Lights nicht von einem spezifischen Gerätetyp abhä
 Die volle Spezifikation befindet sich in der Projektablage als Excel-Datei. 
 
 #### Web Service Operations
-* /api/devices
-* /api/alarms
-* /api/deviceactions
-* /api/actiongroupmembers
-* /api/actiongroup/activate
-* /api/actiongroup/disable
-* /api/nightlight/activate
-* /api/nightlight/disable
 
-##### GET Operations
-Nachfolgend ist eine Übersicht der zu den Operations gehörigen GET-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Requests](WI27_WebService.Definition_GET.PNG)
+    GetDevice
+    AddDevice
+    RemoveDevice
+    GetAlarm
+    AddAlarm
+    RemoveAlarm
+    GetDeviceAction
+    AddDeviceAction
+    RemoveDeviceAction
+    GetActionGroupMember
+    AddActionGroupMember
+    RemoveActionGroupMember
+    ActivateActionGroup
+    DisableActionGroup
+    ActivateNightLight
+    DisableNightLight
 
 
-##### POST Operations
-Nachfolgend ist eine Übersicht der zu den Operations gehörigen POST-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Responses](WI27_WebService.Definition_POST.PNG)
+##### SOAP Requests
+Nachfolgend ist eine Übersicht der zu den Operations gehörigen Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
+![WI27_WebService.Definition_Requests](WI27_WebService.Definition_REQUESTS.PNG)
 
-##### DELETE Operations
-Nachfolgend ist eine Übersicht der zu den Operations gehörigen DELETE-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Responses](WI27_WebService.Definition_DELETE.PNG)
+
+##### SOAP Responses
+Nachfolgend ist eine Übersicht der zu den Operations gehörigen Responses abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
+![WI27_WebService.Definition_Responses](WI27_WebService.Definition_RESPONSES.PNG)
+
 
 ### Klassendiagramme
 Die nachfolgend gezeigten Klassendiagramme basieren auf dem oben dargestellten Datenmodell sowie der Web Service Spezifikation. 
@@ -138,3 +145,180 @@ Die im Design ausgearbeitete Spezifikation beinhaltet bereits einiges an Funktio
 Die Schaltung zeigt, wie das Hauptweckmedium (die LED-Pixelkette WS2801) an den Raspberry PI angeschlossen wird. Die Applikation sieht vor, dass auch andere Geräte angeschlossen und angesteuert werden können. 
 
 ![WI26_Erstellen.Schaltungsentwurf](WI26_Erstellen.Schaltungsentwurf.png)
+
+## Implementation
+
+### Umstellung von SOAP auf REST
+Nach dem  Design im Team entschieden den WebService - anstatt wie in der Analyse angedacht mit SOAP - in REST zu implementieren. Dies weil zu diesem Zeitpunkt das Projekt noch ein Teammitglied hatte, das sich nur mit REST WebServices auskannte. Daher wurde die WebService Spezifikation ebenfalls von SOAP auf REST umgeschrieben.  
+
+#### Web Service Operations
+* /api/devices
+* /api/alarms
+* /api/deviceactions
+* /api/actiongroupmembers
+* /api/actiongroup/activate
+* /api/actiongroup/disable
+* /api/nightlight/activate
+* /api/nightlight/disable
+
+##### GET Operations
+Nachfolgend ist eine Übersicht der zu den Operations gehörigen GET-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
+![WI27_WebService.Definition_Requests](WI27_WebService.Definition_GET.PNG)
+
+
+##### POST Operations
+Nachfolgend ist eine Übersicht der zu den Operations gehörigen POST-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
+![WI27_WebService.Definition_Responses](WI27_WebService.Definition_POST.PNG)
+
+##### DELETE Operations
+Nachfolgend ist eine Übersicht der zu den Operations gehörigen DELETE-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
+![WI27_WebService.Definition_Responses](WI27_WebService.Definition_DELETE.PNG)
+
+### Aktualisierte Klassendiagramme
+
+#### Middlewarelayer
+![WI60_Nachfuehren.Design_Middleware](WI60_Nachfuehren.Design_Middleware.png)
+
+### Verwendete Frameworks, Abhängigkeiten und Libraries
+Zur Effizienten Umsetzung wurden Libraries und Frameworks eingesetzt. Nachfolgend sind diese externen Abhängigkeiten nach Layer aufgeteilt aufgelistet. 
+
+#### Middleware
+* Jersey (JAX-RS Reference Implementation)
+* DbUtils (Apache Commons, JDBC Utility Component)
+* Tomcat 8 (Applicationserver)
+* Java Runtime Environment
+
+#### Treiberlayer
+* TODO
+*
+
+### Automatisierte Installation
+Um die Serverinstallation zu vereinfachen, wurde ein Installationsscript in Shell-Script erstellt, dass die Serverinstallation und das Deployment auf dem Raspberry-PI komplett automatisiert durchführt. Das Script ist nachfolgend eingefügt. 
+
+```bash
+#!/bin/bash
+
+mysql_version="mysql-server"
+tomcat_version="tomcat8"
+java_version="oracle-java8-installer"
+
+context="ROOT"
+sqlFile="02_SQL/WI39_Coding.Datenbankscripts.sql"
+warFile="03_Middleware/ROOT.war"
+
+JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+CATALINA_HOME="/usr/share/$tomcat_version"
+CATALINA_BASE="/var/lib/$tomcat_version"
+
+canDownload()
+{
+  if [[ $(apt-cache search $1 | wc -l) -gt 0 ]] ; then { return 0; } fi
+  return 1
+}
+
+isInstalled()
+{
+  if [[ $(dpkg -l | grep $1 | wc -l) -gt 0 ]] ; then { return 0; } fi
+  return 1
+}
+
+if [[ "$EUID" -ne 0 ]] ; then
+  echo "Please run as root"
+  exit
+fi
+
+if [ ! -f $1 ] || [ -z ${1+x} ] ; then
+  echo "Pass WAR-File as first parameter"; 
+  exit 1
+fi
+
+warFile=$1
+
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /etc/apt/sources.list.d/webupd8team-java.list
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/webupd8team-java.list
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+
+apt-get -y -qq  update # && apt-get -y -qq upgrade
+apt-get -y -qq  install debconf-utils
+
+if ! canDownload $java_version || ! canDownload $mysql_version || ! canDownload $tomcat_version ; then
+  echo "Could not download necessary software. Aborting."
+  exit 1
+fi
+
+if ! isInstalled $java_version ; then
+  echo "installing $java_version..."
+  debconf-set-selections <<< "debconf shared/accepted-oracle-license-v1-1 select true"
+  debconf-set-selections <<< "debconf shared/accepted-oracle-license-v1-1 seen true"
+  apt-get -y -qqq install $java_version > /dev/null
+
+  export JAVA_HOME
+
+  if ! isInstalled $java_version ; then
+    echo "Could not install $java_version. Aborting."
+    exit 1; 
+  fi
+fi
+
+if ! isInstalled $tomcat_version ; then
+  echo "adding tomcat user..."
+  adduser --quiet --system --shell /bin/bash --gecos 'Tomcat Java Servlet and JSP engine' --group --disabled-password --home /home/tomcat $tomcat_version
+
+  echo "installing $tomcat_version..."
+  apt-get -y -qq install $tomcat_version > /dev/null
+
+  export CATALINA_HOME
+  echo "export CATALINA_BASE=$CATALINA_BASE" >> $CATALINA_HOME/bin/setenv.sh
+  chown $tomcat_version:$tomcat_version $CATALINA_HOME/bin/setenv.sh
+  chmod a+x $CATALINA_HOME/bin/setenv.sh
+  mkdir $CATALINA_BASE/temp
+  chown $tomcat_version:$tomcat_version $CATALINA_BASE/temp
+
+  sed -i "s:#JAVA_HOME=.*:JAVA_HOME=$JAVA_HOME:" /etc/default/$tomcat_version
+
+  if ! isInstalled $tomcat_version  ; then
+  echo "Could not install $tomcat_version. Aborting."
+  exit 1; 
+  fi
+fi
+
+if ! isInstalled $mysql_version ; then
+  echo "installing $mysql_version..."
+  debconf-set-selections <<< "$mysql_version mysql-server/root_password password eshh"
+  debconf-set-selections <<< "$mysql_version mysql-server/root_password_again password eshh"
+  apt-get -y -qq install $mysql_version > /dev/null
+
+  if ! isInstalled $mysql_version ; then
+  echo "Could not install $mysql_version. Aborting."
+  exit 1; 
+  fi
+fi
+
+ip=$(hostname -I)
+echo "[mysqld]"  > /etc/mysql/conf.d/wakeuplight.cnf
+echo "bind-address   = $ip" >> /etc/mysql/conf.d/wakeuplight.cnf
+
+echo "adding test data to database mydb..."
+mysql --user=root --password=eshh < $sqlFile
+
+rm -rf $CATALINA_BASE/webapps/$context
+rm -rf $CATALINA_BASE/webapps/$context.war
+cp $warFile $CATALINA_BASE/webapps/$context.war
+chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
+
+systemctl restart $tomcat_version
+
+### Installing Python Tools
+echo "install python pip, xmltodict and python-mysqldb"
+sudo apt-get -y -qq install python-pip
+sudo pip -q install xmltodict MySQL-python
+
+### summary
+echo "All finished!"
+echo "MySQL ist available at $ip on port 3306, use the wakeuplight user!"
+echo "REST API is available at $ip:8080/rest/"
+
+```
+
+## Tests
+
