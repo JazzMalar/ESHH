@@ -110,13 +110,13 @@ chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 
 systemctl restart $tomcat_version
 
+### Installing Python Tools
+echo "install python pip, xmltodict and python-mysqldb"
+sudo apt-get -y -qq install python-pip
+sudo pip -q install xmltodict MySQL-python
+
 ### summary
 echo "All finished!"
 echo "MySQL ist available at $ip on port 3306, use the wakeuplight user!"
 echo "REST API is available at $ip:8080/rest/"
-
-echo "install python pip and xmltodict"
-sudo apt-get install python-pip
-sudo pip install xmltodict
-
 
