@@ -1,4 +1,6 @@
+*.swp
 .idea/
 *.pyc
 *.log
+*.DS_Store
 .DS_Store

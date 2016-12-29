@@ -16,19 +16,34 @@ class LED(object):
 
     def setR(self,r):
         if(self.red != r):
-            self.red            = r
+            if (r > 255):
+                self.red = 255
+            elif (r < 0):
+                self.red = 0
+            else:
+                self.red            = r
             self.__newColor       = True
         return self
 
     def setG(self, g):
         if (self.green != g):
-            self.green = g
+            if (g > 255):
+                self.green = 255
+            elif (g < 0):
+                self.green = 0
+            else:
+                self.green = g
             self.__newColor = True
         return self
 
     def setB(self, b):
         if (self.blue != b):
-            self.blue = b
+            if (b > 255):
+                self.blue = 255
+            elif (b < 0):
+                self.blue = 0
+            else:
+                self.blue = b
             self.__newColor = True
         return self
 
