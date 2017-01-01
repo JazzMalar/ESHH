@@ -178,6 +178,51 @@ Nachfolgend ist eine Übersicht der zu den Operations gehörigen DELETE-Requests
 
 #### Middlewarelayer
 ![WI60_Nachfuehren.Design_Middleware](WI60_Nachfuehren.Design_Middleware.png)
+**Resources**
+Die Ressourcen sind die Endpunkte des REST Web Service. Für jede ansprechbare Seite, existiert ein Endpunkt. Anfragen an diese Endpunkte verarbeitet die JAX-RS Referenzimplementation Jersey und stellt die jeweiligen Requestparameter mittels Autoboxing den Resource-Klassen zur Verfügung. In diesen Resource-Klassen, sind dann die Java-Methoden implementiert, die das tatsächliche "doing" auf Serverebene ausführen. 
+
+**DBProxyFactory**
+Die DBProxyFactory hat die Aufgabe mittels Dependency Injection eine Referenz auf einen gültigen **IDBProxy** zu produzieren. Die Resource-Klassen greifen über die DBProxyFactory auf die **IDBProxy** Instanz zu und kommunizieren so mit der Datenbank. Dank dieser Indirektion erfüllt die Middleware das Dependency Inversion Principle. 
+Die DBProxyFactory ist ein Singleton als Enumeration implementiert. Das hat den Vorteil, dass der Singleton auch nicht mittels Reflection umgangen werden kann, sonst aber gleichwertig zum klassischen Singleton ist. 
+
+**IDBProxy**
+Das IDBProxy Interface implementiert die notwendigen Methoden um mit der Datenbank zu kommunizieren. Eine Klasse, die das  Interface implementiert, muss nur noch Datenbankspezifisch die Methoden implementieren. 
+
+**MySqlDBProxy**
+In der tatsächlichen Implementation wird der SQL-Code umgesetzt, um die im Interface spezifizierten Methoden auszühren. Im Wakeup-Light Projekt, nutzt der finite DBProxy die Apache DbUtils für eine möglichst abstrakte Datenbankkommunikation. 
+
+**Model**
+Die Modelklassen sind die Mappingcontainer für die Verwendung der relationalen Daten aus der Datenbank in der objekt-orientierten Welt. 
+
+#### Treiberlayer Model
+![WI61_Treiber_Diagramm](WI61_Treiber_Diagramm.png)
+**Klasse LED**
+
+Beinhaltet die Grundlogik und Funktionen für jedes LED. Neben den Werten für Rot, Grün, Blau die einzeln oder zusammen gesetzt werden können, wird ebenfalls noch abgespeichert ob eine neue Farbe gesetzt wurde. Dieser boolean wird jedes Mal wenn die Farbe abgefragt wird auf False gesetzt.
+
+**Klasse LEDObject**
+
+Diese Klasse erbt von die Grundfunktionen von der Klasse LED und erweitert diese um die zwei Variablen „Priorität“ und „benutzt von“. 
+
+**Klasse LEDHandler**
+
+Die Klasse enhält ein Array von LEDObject’s. Somit kann für jeden Aufruf für verschiedene Timer oder andere aktivitäten ein LED mit Farbe, Priorität und ID des Aufrufers abgespeichert werden. Wird nun der Strip „geschrieben“ also physisch angezeigt, wird für jedes einzelne LED die Farbe Aufrufs mit der höchsten Prio angezeigt. Ist z.B. ein Timer beendet, kann mittels der Funktion removeLEDUsedBy() das LED gelöscht werden und das LED mit der nächst tieferen Prio wird angezeigt.
+
+**Klasse LEDStrip**
+
+LEDStrip bildet den pyhsischen Strip ab. Die Klasse besitzt ein Array mit der Anzahl LEDHandler wie LED’s am Strip sind. Es ist möglich dem ganzen Strip die gleiche Farbe zu geben, sowie auch nur einzelne LED’s zu beeinflussen. Mittels der Funktion setColorToStrip() wird der Strip aktualisiert.
+
+
+#### Treiberlayer Middlelayer
+![WI61DriverMiddlelayer](WI61DriverMiddlelayer.png)
+**Treiber Middlelayer**
+
+Über die API-Klasse werden die Daten der DB Abgefragt. Alle Requests greifen auf die API’s zu. Für jede der einzelnen API’s wurde eine Hilfsklasse erstellt, damit die Daten einfach gespeichert und abgefragt werden können. 
+Zusätzlich existiert eine Klasse Alarm. In dieser wird der Alarm abgebildet. 
+
+Das folgende Ablaufdiagramm zeigt, wie der Treiberlayer entscheidet, ob eines seiner angeschlossenen Geräte jetzt aktiviert werden soll. 
+
+![WI61ActivityDiagramm](WI61ActivityDiagramm.png)
 
 ### Verwendete Frameworks, Abhängigkeiten und Libraries
 Zur Effizienten Umsetzung wurden Libraries und Frameworks eingesetzt. Nachfolgend sind diese externen Abhängigkeiten nach Layer aufgeteilt aufgelistet. 
@@ -319,6 +364,27 @@ echo "MySQL ist available at $ip on port 3306, use the wakeuplight user!"
 echo "REST API is available at $ip:8080/rest/"
 
 ```
-
 ## Tests
+Alle Testszenarios wurden durchgespielt. Für die Treibertests wurde ein Skript (testplan.py) angelegt welches die Tests durchspielt. Jedes LED lässt sich einzeln steuern. Zusätzlich wurde mit weiteren Tests die Prioritätsfunktion überprüft (wenn mehrere Programme gleichzeitig aktiv sind). Werden für die LED’s verschiedene Prio’s mit verschiedenen Farben festgelegt, erscheinen auch die geforderten Farben. Sobald eine Farbe gelöscht wird, erscheint die Farbe mit der nächst tieferen Prio. Da der Strip als Singleton implementiert wurde, kann man auch sicher sein, dass immer der gleiche Strip angesprochen wird.  
 
+
+TODO: Hier kommt noch der Testplan im Querformat als PDF rein
+
+## Fazit
+Das Projekt hat sich als sehr softwarelastig herausgestellt. Die ursprüngliche Idee, ein Wakeup-Light zu erstellen, hat sich schnell als relativ einfach implementierbar herausgestellt. Komplexität gewann das Projekt durch die Anforderung möglichst erweiterbar zu sein. Dieser Wunsch nach Erweiterbarkeit schlug sich schnell im Softwaredesign nieder und verursache erheblichen Mehraufwand in der Implementation. Die guten libraries für den Raspberry PI haben sehr deutlich gezeigt, dass die Hardware in einem solchen Projekt, nicht das Problem ist, sondern die Software dahinter. 
+
+Obwohl der Hardwareteil etwas kleiner ausgefallen ist, als wir uns ursprünglich vorgestellt haben, sind wir zufrieden mit unserem Resultat. Das Projekt legt eine gute Basis für ein solides und erweiterbares Weck-Automatisierungssystem.
+
+### Projektmanagement
+Das Projekt Wakeup-Light wurde - ganz im Geiste des Fernstudiums - komplett "Remote" umgesetzt. So konnten diverse Kollaborations-Tools ausprobiert und direkt in den Projektablauf integriert werden. Ein gutes Beispiel dafür ist der Projektplan, der mittels Google Docs online geteilt wurde. Der Projektplan teilt das ganze Projekt in mehrere Work Items - also kleine, überschaubare Arbeitseinheiten, die von einer einzelnen Person umgesetzt werden können. Diese Work Items wurden dann in Google Docs den Projektteilnehmern zugeteilt und dort auch nachgeführt. Schlussendlich bestand das Projekt Wakeup-light aus über 50 Work Items.  
+
+### Projektbeteiligung
+![WI65_Kennzahlen](WI65_Kennzahlen.png)
+Die Grafik zeigt den Beteiligungsverlauf der Projektteilnehmer. Die grünen Zahlen stellen die hinzugefügten Anzahl Zeilen dar, während die Roten, die gelöschten Zeilen darstellen. Die objektorientierten Analyse & Design Dokumente wurden in einem Format gespeichert, dass die grafischen Elemente textuell beschreibt. So stehen diese Design Dokumente als Textdokumente (JSON) zur Verfügung. Dies hat aber den Nachteil, dass mit der initialen Erstellung dieser Dokumente eine enorm hohe Anzahl an Zeilen (~36'000) erstellt wurden. Dieser Fakt zeigt sich in dieser Endauswertung sehr deutlich.    
+
+### Ausfall Endre Marczi
+Während des Projekts zeichnete sich sehr schnell ab, das nicht alle Teilnehmer sich gleich stark beteiligen. Endre Marczi hat erst gut gestartet und innerhalb eines Tages das initiale Analysedokument durchgelesen und Korrekturen angebracht. Danach ging es aber rapide bergab mit seiner Beteiligung. Die Bitte nach Feedback zu den Designdokumenten blieb bereits unbeantwortet. Auf Rückfrage an der darauffolgenden Präsenz, meinte er nur, er habe die Dokumente zwar gesehen, sei dann aber in die Ferien bis nach dem Abgabetermin. Dieses Gespräch fand persönlich in Regensdorf statt und kann nicht weiter belegt werden. Daraufhin vereinbarten wir, dass jeder Projektteilnehmer einen wöchentlichen Status zu seinen Arbeiten abgeben soll. Jeweils auf Rückfrage, schickte Endre Marczi auch einen kurzen Status, die den anderen Projektteilnehmern Hoffnung gaben, "dass er einfach kein grosser Redner ist, aber seine Arbeit macht".
+Da bereits während der Präsenz durchsickerte, dass Endre Marczi mit der Designentscheidung SOAP als Web Service Architektur zu verwenden nicht ganz zufrieden war, änderten wir nachträglich dies zur REST-Architektur, in der Hoffnung, dass ihn dies motivieren würde, sich stärker zu beteiligen. Endre Marczi bedankte sich per E-Mail für diese Änderung und gab an, einen REST-Client für den GUI Teil am implementieren zu sein. 
+In der darauffolgenden Woche, gab Endre Marczi - wieder nach Rückfrage - in seinem Status bekannt, dass er den Client fertig hat und nun am Web-UI bzw. Schnittstellenimplementierung arbeiten will. Daraufhin wurde er per E-Mail gebeten, seinen aktuellen Arbeitsstand jeweils in das Projekt GIT-Repository hochzuladen, wie es die restlichen Projektteilnehmer bereits seit Beginn der Arbeit tun. Daraufhin hörten wir nichts mehr von Endre Marczi. Wir - die restlichen Projektteilnehmer - informierten daraufhin die Lehrperson und teilten die verbleibenden Arbeiten so gut es ging unter uns auf. 
+
+Endre Marczi war zuständig für die clientseitige Implementation der Applikation. Dazu gehörte der GUI-Teil mit Anbindung an den Web Service. Dieser Teil fehlt nun komplett. Grundsätzlich wäre das Projekt aber bereits anders dimensioniert und aufgeteilt worden, wäre bereits am Anfang klar gewesen, dass das Projekt mit zwei Personen umgesetzt werden muss. 
