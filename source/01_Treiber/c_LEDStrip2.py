@@ -12,9 +12,7 @@ import time
 class LEDStrip(object):
 
     #WS2801
-    #LPD8806
     #LPD6803
-    #SM16716
     #debug = true --> test ohne RASPI, spi-funktionen werden ausgeklammert
     def __init__(self,anzahlLEDs, stripType="WS2801",debug=False):
         self.logger = logger("LEDStrip")
@@ -107,10 +105,10 @@ class LEDStrip(object):
                 pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB_LPD6803()
             else:
                 pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB()
-            self.__write_stream(pixel_output)
+            self.__writeStream(pixel_output)
 
 
-    def __write_stream(self,pixels):
+    def __writeStream(self, pixels):
         # 3 bytes per pixel
         PIXEL_SIZE = 3
         PIXEL_SIZE_SM16716 = 4

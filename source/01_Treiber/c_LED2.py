@@ -4,46 +4,30 @@ class LED(object):
 
     def __init__(self):
         self.logger         = logger("class LED")
-        self.red            = 0
-        self.green          = 0
-        self.blue           = 0
-        self.color          = bytearray(b'\x00\x00\x00')
-        self.color_LPD6803  = bytearray(b'\x00\x00\x00')
-        #Private
+        self.__red            = 0
+        self.__green          = 0
+        self.__blue           = 0
+        self.__color          = bytearray(b'\x00\x00\x00')
+        self.__color_LPD6803  = bytearray(b'\x00\x00\x00')
         self.__newColor = True
-        self.logger.log("debug","init red: "+str(self.red)+ " green: "+str(self.green)+" blue: "+str(self.green))
+        self.logger.log("debug","init red: " + str(self.__red) + " green: " + str(self.__green) + " blue: " + str(self.__green))
         return self
 
     def setR(self,r):
-        if(self.red != r):
-            if (r > 255):
-                self.red = 255
-            elif (r < 0):
-                self.red = 0
-            else:
-                self.red            = r
+        if(self.__red != r):
+            self.__red            = r
             self.__newColor       = True
         return self
 
     def setG(self, g):
-        if (self.green != g):
-            if (g > 255):
-                self.green = 255
-            elif (g < 0):
-                self.green = 0
-            else:
-                self.green = g
+        if (self.__green != g):
+            self.__green = g
             self.__newColor = True
         return self
 
     def setB(self, b):
-        if (self.blue != b):
-            if (b > 255):
-                self.blue = 255
-            elif (b < 0):
-                self.blue = 0
-            else:
-                self.blue = b
+        if (self.__blue != b):
+            self.__blue = b
             self.__newColor = True
         return self
 
@@ -58,29 +42,29 @@ class LED(object):
         self.__newColor       = False
         return temp
 
-    def setNewColorFalse(self):
+    def __setNewColorFalse(self):
         self.__newColor = False
 
     def getR(self):
-        return self.red
+        return self.__red
 
     def getB(self):
-        return self.blue
+        return self.__blue
 
     def getG(self):
-        return self.green
+        return self.__green
 
     def getRGB(self):
-        self.color[0] = self.red
-        self.color[1] = self.green
-        self.color[2] = self.blue
-        self.setNewColorFalse()
-        return self.color
+        self.__color[0] = self.__red
+        self.__color[1] = self.__green
+        self.__color[2] = self.__blue
+        self.__setNewColorFalse()
+        return self.__color
 
 
     def getRGB_LPD6803(self):
-        self.color_LPD6803[0]   = self.green
-        self.color_LPD6803[1]   = self.red
-        self.color_LPD6803[2]   = self.blue
-        self.setNewColorFalse()
-        return self.color_LPD6803
+        self.__color_LPD6803[0]   = self.__green
+        self.__color_LPD6803[1]   = self.__red
+        self.__color_LPD6803[2]   = self.__blue
+        self.__setNewColorFalse()
+        return self.__color_LPD6803
