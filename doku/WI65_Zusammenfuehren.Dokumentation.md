@@ -1,7 +1,6 @@
-# Projektdokumentation
+# Projektdokumentation "Wakeup-Light"
 
-## Projekt
-WakeUp-Light
+![Titelbild](../pictures/title.jpg)
 
 ## Gruppe
 * Andreas Züger
@@ -577,6 +576,8 @@ Alle Testszenarios wurden durchgespielt. Für die Treibertests wurde ein Skript 
 | erwartete Reaktion | Led's sollten immer dünkler werden | 
 | tatsächliche Reaktion | wie erwartet |
 | Fazit | Zeitintervall zum heller werden ist momentan fix |
+
+![Hardwaretests](../pictures/oszi.jpeg)
 
 ## Fazit
 Das Projekt hat sich als sehr softwarelastig entpuppt. Die ursprüngliche Idee, ein Wakeup-Light zu erstellen, hat sich schnell als relativ einfach implementierbar herausgestellt. Komplexität gewann das Projekt durch die Anforderung möglichst erweiterbar zu sein. Dieser Wunsch nach Erweiterbarkeit schlug sich schnell im Softwaredesign nieder und verursache erheblichen Mehraufwand in der Implementation. Die guten libraries für den Raspberry PI haben sehr deutlich gezeigt, dass die Hardware in einem solchen Projekt, nicht das Problem ist, sondern die Software dahinter. 
