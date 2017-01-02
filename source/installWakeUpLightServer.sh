@@ -111,9 +111,9 @@ chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 systemctl restart $tomcat_version
 
 ### Installing Python Tools
-echo "install python pip, xmltodict and python-mysqldb"
+echo "install python pip, xmltodict"
 sudo apt-get -y -qq install python-pip
-sudo pip -q install xmltodict MySQL-python
+sudo pip -q install xmltodict
 
 ### summary
 echo "All finished!"
