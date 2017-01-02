@@ -236,7 +236,9 @@ Zur Effizienten Umsetzung wurden Libraries und Frameworks eingesetzt. Nachfolgen
 * Python2.7 (mit den Zusatzmodulen requests, xml.dom.minidom, xmltodict um die Api ansprechen zu können)
 
 ### Automatisierte Installation
-Um die Serverinstallation zu vereinfachen, wurde ein Installationsscript in Shell-Script erstellt, dass die Serverinstallation und das Deployment auf dem Raspberry-PI komplett automatisiert durchführt. Das Script ist nachfolgend eingefügt. 
+Um die Serverinstallation zu vereinfachen, wurde ein Installationsscript in Shell-Script erstellt, dass die Serverinstallation und das Deployment auf dem Raspberry-PI komplett automatisiert durchführt. 
+
+Das Script initialisiert erst einige Variablen, damit bei Änderungen nicht das ganze Script nicht durchsucht werden muss. 
 
 ```bash
 #!/bin/bash
@@ -252,7 +254,15 @@ warFile="03_Middleware/ROOT.war"
 JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 CATALINA_HOME="/usr/share/$tomcat_version"
 CATALINA_BASE="/var/lib/$tomcat_version"
+```
 
+Die Funktion canDownload überprüft, ob ein zu installierendes Paket überhaupt verfügbar ist. Die Funktion isInstalled prüft, ob ein entsprechendes Paket nicht bereits installiert ist. 
+
+Damit Software installiert werden kann, muss das Script mit ROOT-Rechten aufgerufen werden. Das Script überprüft, ob der aufrufende User ROOT-Rechte hat, bevor es weitermacht. 
+
+Als ersten Parameter erwartet das Script den Pfad zum Server-WAR-File das deployed werden soll. 
+
+```bash
 canDownload()
 {
   if [[ $(apt-cache search $1 | wc -l) -gt 0 ]] ; then { return 0; } fi
@@ -276,14 +286,26 @@ if [ ! -f $1 ] || [ -z ${1+x} ] ; then
 fi
 
 warFile=$1
+```
 
+Damit die offizielle Oracle JVM installiert werden kann, muss eine zusätzliche Quelle hinzugefügt werden und der entsprechende public key installiert werden. 
+
+```bash
 echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /etc/apt/sources.list.d/webupd8team-java.list
 echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/webupd8team-java.list
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+```
 
-apt-get -y -qq  update # && apt-get -y -qq upgrade
+Das Script führt nun einen Quellen Update durch und installiert die debconf-utils damit nachfolgende Konfigurationen der Installationen einfacher durchgeführt werden können. 
+
+```bash
+apt-get -y -qq  update
 apt-get -y -qq  install debconf-utils
+```
 
+Nun werden nacheinander die benötigten Tools installiert. Das Script prüft jeweils erst ob es heruntergeladen werden kann, bevor es tatsächlich etwas versucht zu installieren. Nach der Installation prüft das Script, ob die Installation geklappt hat. Wenn nicht, bricht es ab. 
+
+```bash
 if ! canDownload $java_version || ! canDownload $mysql_version || ! canDownload $tomcat_version ; then
   echo "Could not download necessary software. Aborting."
   exit 1
@@ -302,7 +324,10 @@ if ! isInstalled $java_version ; then
     exit 1; 
   fi
 fi
+```
+Tomcat wird als Application Server benutzt, der den REST-WebService hosted. Das Script versucht hier diesen zu installieren und führt einige Basiskonfigurationen durch. 
 
+```bash
 if ! isInstalled $tomcat_version ; then
   echo "adding tomcat user..."
   adduser --quiet --system --shell /bin/bash --gecos 'Tomcat Java Servlet and JSP engine' --group --disabled-password --home /home/tomcat $tomcat_version
@@ -324,7 +349,10 @@ if ! isInstalled $tomcat_version ; then
   exit 1; 
   fi
 fi
+```
+In dieser Präsentationskonfiguration wird MySQL als DBMS eingesetzt. Dieser wird hier installiert.
 
+```bash
 if ! isInstalled $mysql_version ; then
   echo "installing $mysql_version..."
   debconf-set-selections <<< "$mysql_version mysql-server/root_password password eshh"
@@ -336,7 +364,11 @@ if ! isInstalled $mysql_version ; then
   exit 1; 
   fi
 fi
+```
 
+Nun führt das Script eine rudimentäre Konfiguration des MySQL-Server durch und importiert die Testdaten in die Datenbank. Ausserdem wird das mitgegebene WAR-File deployed. 
+
+```bash
 ip=$(hostname -I)
 echo "[mysqld]"  > /etc/mysql/conf.d/wakeuplight.cnf
 echo "bind-address   = $ip" >> /etc/mysql/conf.d/wakeuplight.cnf
@@ -360,7 +392,6 @@ sudo pip -q install xmltodict
 echo "All finished!"
 echo "MySQL ist available at $ip on port 3306, use the wakeuplight user!"
 echo "REST API is available at $ip:8080/rest/"
-
 ```
 ## Tests
 Alle Testszenarios wurden durchgespielt. Für die Treibertests wurde ein Skript (testplan.py) angelegt welches die Tests nacheinander durchläuft. Jedes LED lässt sich einzeln steuern. Zusätzlich wurde mit weiteren Tests die Prioritätsfunktion überprüft (wenn mehrere Programme gleichzeitig aktiv sind). Werden für die LED’s verschiedene Prio’s mit verschiedenen Farben festgelegt, erscheinen auch die geforderten Farben. Sobald eine Farbe gelöscht wird, erscheint die Farbe mit der nächst tieferen Prio. Da der Strip als Singleton implementiert wurde, kann man auch sicher sein, dass immer der gleiche Strip angesprochen wird.  
@@ -558,13 +589,16 @@ Das Projekt Wakeup-Light wurde - ganz im Geiste des Fernstudiums - komplett "Rem
 Der Projektplan ist [hier](https://docs.google.com/spreadsheets/d/1FavRmBRhkSZag9ZJz7cpUHyRiqEvQwWesLXLay4Id8w/edit?usp=sharing) einsehbar. 
 
 ### Projektbeteiligung
-![WI65_Kennzahlen](WI65_Kennzahlen.png)
+![WI65_Kennzahlen](WI65_Kennzahlen.png)  
 Die Grafik zeigt den Beteiligungsverlauf der Projektteilnehmer. Die grünen Zahlen stellen die hinzugefügten Anzahl Zeilen dar, während die Roten, die gelöschten Zeilen darstellen. Die objektorientierten Analyse & Design Dokumente wurden in einem Format gespeichert, dass die grafischen Elemente textuell beschreibt. So stehen diese Design Dokumente als Textdokumente (JSON) zur Verfügung. Dies hat aber den Nachteil, dass mit der initialen Erstellung dieser Dokumente eine enorm hohe Anzahl an Zeilen (~36'000) erstellt wurden. Dieser Fakt zeigt sich in dieser Endauswertung sehr deutlich.    
 
-### Ausfall Endre Marczi
-Während des Projekts zeichnete sich sehr schnell ab, das nicht alle Teilnehmer sich gleich stark beteiligen. Endre Marczi hat erst gut gestartet und innerhalb eines Tages das initiale Analysedokument durchgelesen und Korrekturen angebracht. Danach ging es aber leider bergab mit seiner Beteiligung. Die Bitte nach Feedback zu den Designdokumenten blieb bereits unbeantwortet. Auf Rückfrage an der darauffolgenden Präsenz, meinte er nur, er habe die Dokumente zwar gesehen, sei dann aber in die Ferien bis nach dem Abgabetermin. Dieses Gespräch fand persönlich in Regensdorf statt und kann nicht weiter belegt werden. Daraufhin wurde vereinbart, dass jeder Projektteilnehmer einen wöchentlichen Status zu seinen Arbeiten abgeben soll. Jeweils auf Rückfrage, schickte Endre Marczi auch einen kurzen Status, die den anderen Projektteilnehmern Hoffnung gab, "dass er einfach kein grosser Redner ist, aber seine Arbeit macht".
-Da bereits während der Präsenz durchsickerte, dass Endre Marczi mit der Designentscheidung SOAP als Web Service Architektur zu verwenden, nicht ganz zufrieden war, wurde dies nachträglich zur REST-Architektur geändert, in der Hoffnung, dass dadurch die Beteiligung von Endre Marczi steigen würde. Dieser bedankte sich per E-Mail für diese Änderung und gab an, an der Implementierung eines REST-Clients für den GUI Teil sei. In der darauffolgenden Woche, gab Endre Marczi - wieder erst auf Rückfrage - in seinem Status bekannt, dass er den Client fertig hat und nun am Web-UI bzw. der Schnittstellenimplementierung arbeiten will. Daraufhin wurde er per E-Mail gebeten, seinen aktuellen Arbeitsstand jeweils in das Projekt GIT-Repository hochzuladen - wie es die beiden anderen Projektteilnehmer bereits seit Beginn der Arbeit tun - damit der Stand der Arbeit bewertet werden kann. Ab diesem Zeitpunkt fand keine Kommunikation mehr statt. Die restlichen Projektteilnehmer informierten daraufhin den Dozenten und als dieser Endre Marczi auch nicht erreichen konnte, teilten sie die verbleibenden Arbeiten so gut es ging unter sich auf. 
+### Ausfall Teammitglied
+Während des Projekts zeichnete sich sehr schnell ab, das nicht alle Teilnehmer sich gleich stark beteiligen. E.M. hat erst gut gestartet und innerhalb eines Tages das initiale Analysedokument durchgelesen und Korrekturen angebracht. Danach ging es aber leider bergab mit seiner Beteiligung. Die Bitte nach Feedback zu den Designdokumenten blieb bereits unbeantwortet. Auf Rückfrage an der darauffolgenden Präsenz, meinte dieser er habe die Dokumente zwar gesehen, sei dann aber in die Ferien bis nach dem Abgabetermin. Daraufhin wurde vereinbart, dass jeder Projektteilnehmer einen wöchentlichen Status zu seinen Arbeiten abgeben soll. Jeweils auf Rückfrage, schickte E.M. auch einen kurzen Status, die den anderen Projektteilnehmern Hoffnung gab, "dass er einfach kein grosser Redner ist, aber seine Arbeit macht".
+Da bereits während der Präsenz durchsickerte, dass E.M. mit der Designentscheidung SOAP als Web Service Architektur zu verwenden, nicht ganz zufrieden war, wurde dies nachträglich zur REST-Architektur geändert, in der Hoffnung, dass dadurch die Beteiligung von E.M. steigen würde. Dieser bedankte sich per E-Mail für diese Änderung und gab an, an der Implementierung eines REST-Clients für den GUI Teil sei. In der darauffolgenden Woche, gab E.M. - wieder erst auf Rückfrage - in seinem Status bekannt, dass er den Client fertig hat und nun am Web-UI bzw. der Schnittstellenimplementierung arbeiten will. Daraufhin wurde er per E-Mail gebeten, seinen aktuellen Arbeitsstand jeweils in das Projekt GIT-Repository hochzuladen - wie es die beiden anderen Projektteilnehmer bereits seit Beginn der Arbeit tun - damit der Stand der Arbeit bewertet werden kann. Ab diesem Zeitpunkt fand keine Kommunikation mehr statt. Die restlichen Projektteilnehmer informierten daraufhin den Dozenten und als dieser E.M. auch nicht erreichen konnte, teilten sie die verbleibenden Arbeiten so gut es ging unter sich auf. 
 
-Endre Marczi war zuständig für die clientseitige Implementation der Applikation. Dazu gehörte der GUI-Teil mit Anbindung an den Web Service. Dieser Teil fehlt nun komplett. Grundsätzlich wäre das Projekt aber bereits anders dimensioniert und aufgeteilt worden, wäre bereits am Anfang klar gewesen, dass das Projekt mit zwei Personen umgesetzt werden muss. 
+E.M. war zuständig für die clientseitige Implementation der Applikation. Dazu gehörte der GUI-Teil mit Anbindung an den Web Service. Dieser Teil fehlt nun komplett. Grundsätzlich wäre das Projekt aber bereits anders dimensioniert und aufgeteilt worden, wäre bereits am Anfang klar gewesen, dass das Projekt mit zwei Personen umgesetzt werden muss. 
 
-Sollte es für Notwendig befunden werden, kann auf Nachfrage die ganze E-Mail Kommunikation digital zur Verfügung gestellt werden.   
+Sollte es für Notwendig befunden werden, kann auf Nachfrage die ganze E-Mail Kommunikation digital zur Verfügung gestellt werden.  
+
+## Quellen
+* [Gim] [Effects of artificial dawn on subjective ratings of sleep inertia and dim light melatonin onset.](https://www.ncbi.nlm.nih.gov/pubmed/20653451) 
