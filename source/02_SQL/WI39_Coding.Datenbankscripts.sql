@@ -122,7 +122,7 @@ GRANT ALL ON `mydb`.* TO 'wakeuplight';
 GRANT SELECT ON TABLE `mydb`.* TO 'wakeuplight';
 GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `mydb`.* TO 'wakeuplight';
 GRANT SELECT, INSERT, TRIGGER ON TABLE `mydb`.* TO 'wakeuplight';
-GRANT EXECUTE ON ROUTINE `mydb`.* TO 'wakeuplight';
+-- GRANT EXECUTE ON ROUTINE `mydb`.* TO 'wakeuplight';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

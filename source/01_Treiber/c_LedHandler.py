@@ -63,6 +63,9 @@ class LEDHandler():
     def getRGB(self):
         return self.__getLED().getRGB()
 
+    def isNewColor(self):
+        return self.__getLED().isNewColor()
+
     # gibt Color in 6803 Farbreihenfolge
     def getRGB_LPD6803(self):
         return self.__getLED().getRGB_LPD6803()

@@ -12,9 +12,7 @@ import time
 class LEDStrip(object):
 
     #WS2801
-    #LPD8806
     #LPD6803
-    #SM16716
     #debug = true --> test ohne RASPI, spi-funktionen werden ausgeklammert
     def __init__(self,anzahlLEDs, stripType="WS2801",debug=False):
         self.logger = logger("LEDStrip")
@@ -67,8 +65,20 @@ class LEDStrip(object):
             led = self.getLEDNumber(i)
             print "["+str(i)+"] RGB "+str(hex(led.getR()))+"/"+str(hex(led.getG()))+"/"+str(hex(led.getB()))+" Prio: "+str(led.getPrio())+" usedBy: "+str(led.getUsedBy())
 
+    def printStripChanges(self):
+        for i in range(0, self.__anzLeds):
+            led = self.getLEDNumber(i)
+            if led.isNewColor():
+                print "[" + str(i) + "] RGB " + str(hex(led.getR())) + "/" + str(hex(led.getG())) + "/" + str(
+                hex(led.getB())) + " Prio: " + str(led.getPrio()) + " usedBy: " + str(led.getUsedBy())
+
     def __setStripType(self,type):
-        self.stripType = type
+        if "ws2801" in type.lower():
+            self.stripType = "WS2801"
+        elif "lpd6803" in type.lower():
+            self.stripType = "LPD6803"
+        else:
+            self.stripType = "WS2801"
 
     def __getStripType(self):
         return self.stripType
@@ -95,10 +105,10 @@ class LEDStrip(object):
                 pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB_LPD6803()
             else:
                 pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB()
-            self.__write_stream(pixel_output)
+            self.__writeStream(pixel_output)
 
 
-    def __write_stream(self,pixels):
+    def __writeStream(self, pixels):
         # 3 bytes per pixel
         PIXEL_SIZE = 3
         PIXEL_SIZE_SM16716 = 4
