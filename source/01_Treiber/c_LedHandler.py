@@ -23,10 +23,10 @@ class LEDHandler():
         else:
             return False
 
-    def __getPrio(self):
+    def getPrio(self):
         return self.__getLED().getPrio()
 
-    def __getUsedBy(self):
+    def getUsedBy(self):
         return self.__getLED().getUsedBy()
 
     def setRGB(self,r,g,b,prio,usedBy):
