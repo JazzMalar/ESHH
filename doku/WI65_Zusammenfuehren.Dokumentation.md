@@ -9,7 +9,7 @@ WakeUp-Light
 * <del>Endre Marczi</del>
 
 ## Abstract
-Das Projekt WakeUp-Light erstellt ein Wecksystem dass mittels einem zentralen Server und einem REST-WebService gesteuert werden kann. Der Benutzer des Systems kann Wecker konfigurieren, mit denen er über eine angegebene Weckzeit mit den konfigurierten Weckgeräten geweckt wird. Der zentrale Server stellt die Weckinformationen mittels einem REST-WebService seinen Clients zur Verfügung. Die Clients übernehmen die Ansteuerung der angeschlossenen, externen (Weck-)Geräte und nehmen Input von Sensoren entgegen, die ebenfalls über den zentralen WebService zurück gegeben werden können. Beide Komponenten die Clients sind auf einem oder mehreren Raspberry PI lauffähig.   
+Das Projekt WakeUp-Light erstellt ein Wecksystem dass mittels einem zentralen Server und einem REST-WebService gesteuert werden kann. Der Benutzer des Systems kann Wecker konfigurieren, mit denen er über eine angegebene Weckzeit mit den konfigurierten Weckgeräten geweckt wird. Der zentrale Server stellt die Weckinformationen mittels einem REST-WebService seinen Clients zur Verfügung. Die Clients übernehmen die Ansteuerung der angeschlossenen, externen (Weck-)Geräte und nehmen Input von Sensoren entgegen, ==die ebenfalls über den zentralen WebService zurück gegeben werden können.== Beide Komponenten die Clients sind auf einem oder mehreren Raspberry PI lauffähig.   
 
 ## Analyse
 ### Problembeschreibung
@@ -197,19 +197,15 @@ Die Modelklassen sind die Mappingcontainer für die Verwendung der relationalen 
 #### Treiberlayer Model
 ![WI61_Treiber_Diagramm](WI61_Treiber_Diagramm.png)
 **Klasse LED**
-
-Beinhaltet die Grundlogik und Funktionen für jedes LED. Neben den Werten für Rot, Grün, Blau die einzeln oder zusammen gesetzt werden können, wird ebenfalls noch abgespeichert ob eine neue Farbe gesetzt wurde. Dieser boolean wird jedes Mal wenn die Farbe abgefragt wird auf False gesetzt.
+Beinhaltet die Grundlogik und Funktionen für jedes LED. Die Werte für Rot, Grün, Blau können einzeln oder zusammen gesetzt werden. Zusätzlich wird als Boolean abgespeichert ob eine neue Farbe gesetzt wurde. Nach jedem abfragen der aktuellen Farbe wird der Boolean wieder auf False gesetzt. So könnten theoretisch nur die LED's mit neuer Farbe aktualisiert werden.
 
 **Klasse LEDObject**
-
-Diese Klasse erbt von die Grundfunktionen von der Klasse LED und erweitert diese um die zwei Variablen „Priorität“ und „benutzt von“. 
+Diese Klasse erbt von die Grundfunktionen von der Klasse LED und erweitert diese um die zwei Variablen „Priorität“ und „benutzt von“. Idee dahinter ist, dass die Timer unterschiedliche Prioriät haben. So ist bspw. das Nachtlicht sekundär und hat darum eine niedriegere Prio. Ist nun ein Timer aktiv, kann das Nachtlicht ebenfalls reagieren, es ändert aber nichts an der Farben des Strips, da der Timer höherrangig ist.
 
 **Klasse LEDHandler**
-
 Die Klasse enhält ein Array von LEDObject’s. Somit kann für jeden Aufruf für verschiedene Timer oder andere aktivitäten ein LED mit Farbe, Priorität und ID des Aufrufers abgespeichert werden. Wird nun der Strip „geschrieben“ also physisch angezeigt, wird für jedes einzelne LED die Farbe Aufrufs mit der höchsten Prio angezeigt. Ist z.B. ein Timer beendet, kann mittels der Funktion removeLEDUsedBy() das LED gelöscht werden und das LED mit der nächst tieferen Prio wird angezeigt.
 
 **Klasse LEDStrip**
-
 LEDStrip bildet den pyhsischen Strip ab. Die Klasse besitzt ein Array mit der Anzahl LEDHandler wie LED’s am Strip sind. Es ist möglich dem ganzen Strip die gleiche Farbe zu geben, sowie auch nur einzelne LED’s zu beeinflussen. Mittels der Funktion setColorToStrip() wird der Strip aktualisiert.
 
 
@@ -234,8 +230,7 @@ Zur Effizienten Umsetzung wurden Libraries und Frameworks eingesetzt. Nachfolgen
 * Java Runtime Environment
 
 #### Treiberlayer
-* TODO
-*
+* Python2.7 (mit den Zusatzmodulen requests, xml.dom.minidom, xmltodict um die Api ansprechen zu können)
 
 ### Automatisierte Installation
 Um die Serverinstallation zu vereinfachen, wurde ein Installationsscript in Shell-Script erstellt, dass die Serverinstallation und das Deployment auf dem Raspberry-PI komplett automatisiert durchführt. Das Script ist nachfolgend eingefügt. 
@@ -354,9 +349,9 @@ chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 systemctl restart $tomcat_version
 
 ### Installing Python Tools
-echo "install python pip, xmltodict and python-mysqldb"
+echo "install python pip, xmltodict"
 sudo apt-get -y -qq install python-pip
-sudo pip -q install xmltodict MySQL-python
+sudo pip -q install xmltodict
 
 ### summary
 echo "All finished!"
@@ -368,7 +363,187 @@ echo "REST API is available at $ip:8080/rest/"
 Alle Testszenarios wurden durchgespielt. Für die Treibertests wurde ein Skript (testplan.py) angelegt welches die Tests durchspielt. Jedes LED lässt sich einzeln steuern. Zusätzlich wurde mit weiteren Tests die Prioritätsfunktion überprüft (wenn mehrere Programme gleichzeitig aktiv sind). Werden für die LED’s verschiedene Prio’s mit verschiedenen Farben festgelegt, erscheinen auch die geforderten Farben. Sobald eine Farbe gelöscht wird, erscheint die Farbe mit der nächst tieferen Prio. Da der Strip als Singleton implementiert wurde, kann man auch sicher sein, dass immer der gleiche Strip angesprochen wird.  
 
 
-TODO: Hier kommt noch der Testplan im Querformat als PDF rein
+
+| Testnummer | 1 |
+|:-----------------|:---:|
+| zu testendes Feature | Startkriterien |
+| Bemerkung | Initialisierung |
+| Ausgangskriterien | Raspberry pi wird neu gestartet -> Programm wird gestarted |
+| zu testende Handlung | LED's dürfen keine undefinierten Werte / Farben haben | 
+| erwartete Reaktion | LED's werden korrekt initialisiert und ausgeschaltet | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit |  Led's werden zur Sicherheit bei jedem Start der Software neu initalisiert und ausgeschaltet. Funktioniert |
+
+
+---
+
+| Testnummer | 2 |
+|:-----------------|:---:|
+| zu testendes Feature | alle LED's können auf grün geschaltet werden  |
+| Bemerkung | Treiber |
+| Ausgangskriterien | der LED-Strip ist ausgeschaltet |
+| zu testende Handlung | LED's werden auf grün geschaltet ( über Konsole ) | 
+| erwartete Reaktion | alle LED's leuchten grün | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit |  Funktioniert |
+
+---
+
+| Testnummer | 3 |
+|:-----------------|:---:|
+| zu testendes Feature | alle LED's können auf rot geschaltet werden  |
+| Bemerkung | Treiber |
+| Ausgangskriterien | der LED-Strip ist ausgeschaltet |
+| zu testende Handlung | LED's werden auf rot geschaltet ( über Konsole ) | 
+| erwartete Reaktion | alle LED's leuchten rot | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit |  Funktioniert |
+
+---
+
+| Testnummer | 4 |
+|:-----------------|:---:|
+| zu testendes Feature | alle LED's können auf blau geschaltet werden  |
+| Bemerkung | Treiber |
+| Ausgangskriterien | der LED-Strip ist ausgeschaltet |
+| zu testende Handlung | LED's werden auf blau geschaltet ( über Konsole ) | 
+| erwartete Reaktion | alle LED's leuchten blau | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit |  Funktioniert |
+
+---
+
+| Testnummer | 5 |
+|:-----------------|:---:|
+| zu testendes Feature | alle LED's können einzeln auf rot geschaltet werden |
+| Bemerkung | Treiber |
+| Ausgangskriterien | der LED-Strip ist ausgeschaltet |
+| zu testende Handlung | einzelnes Ansprechen der LEDs mit rot ( über Konsole / Testscript )  | 
+| erwartete Reaktion |jeweils ein nach dem anderen LED leuchtet rot | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit |  Das beschreiben des ganzen Strips dauert länger als erwartet, hier sichtbar weil als Test ein "lauflicht" implementiert wurde |
+
+---
+
+| Testnummer | 6 |
+|:-----------------|:---:|
+| zu testendes Feature | alle LED's können einzeln auf grün geschaltet werden |
+| Bemerkung | Treiber |
+| Ausgangskriterien | der LED-Strip ist ausgeschaltet |
+| zu testende Handlung | einzelnes Ansprechen der LEDs mit grün ( über Konsole / Testscript )  | 
+| erwartete Reaktion | jeweils ein nach dem anderen LED leuchtet grün | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Funktioniert |
+
+---
+
+| Testnummer | 7 |
+|:-----------------|:---:|
+| zu testendes Feature | alle LED's können einzeln auf blau geschaltet werden |
+| Bemerkung | Treiber |
+| Ausgangskriterien | der LED-Strip ist ausgeschaltet |
+| zu testende Handlung | einzelnes Ansprechen der LEDs mit blau ( über Konsole / Testscript )  | 
+| erwartete Reaktion | jeweils ein nach dem anderen LED leuchtet blau | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Funktioniert |
+
+---
+
+| Testnummer | 8 |
+|:-----------------|:---:|
+| zu testendes Feature | LED's können einzeln angesprochen werden |
+| Bemerkung | Treiber |
+| Ausgangskriterien | alle LED's sind ausgeschaltet |
+| zu testende Handlung | LED's können einzeln eingeschalten, gedimmt werden (über Konsole / Testscript))  | 
+| erwartete Reaktion | Led's können einzeln gesteuert werden | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | je nach Strip können die einzelnen Farben der Led's nicht mit 8 Bit angesteuert werden, sondern nur mit 5 (LPD6803) |
+
+---
+
+| Testnummer | 9 |
+|:-----------------|:---:|
+| zu testendes Feature | Bewegungslicht |
+| Bemerkung | Anwendung |
+| Ausgangskriterien | Alle LED's sind ausgeschaltet, der Bewegungssensor hat keine Bewegung erkannt. |
+| zu testende Handlung | Bewegungssensor wird aktiviert  | 
+| erwartete Reaktion | gewünschte LED schalten ein | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Funktioniert |
+
+---
+
+| Testnummer | 10 |
+|:-----------------|:---:|
+| zu testendes Feature | Bewegungslicht |
+| Bemerkung | Anwendung |
+| Ausgangskriterien | Bewegungssensor ist aktiviert, LED's eingeschalten |
+| zu testende Handlung | Timer ist abgelaufen, keine Bewegung vorhanden  | 
+| erwartete Reaktion | LED's sollten ausschalten | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Funktioniert |
+
+---
+
+| Testnummer | 11 |
+|:-----------------|:---:|
+| zu testendes Feature | Timer |
+| Bemerkung | Anwendung |
+| Ausgangskriterien | Alle LED's sind ausgeschaltet, der Bewegungssensor hat keine Bewegung erkannt. |
+| zu testende Handlung | Zeit stimmt mit Timer überein / richtige Abfolge wird ausgeführt  | 
+| erwartete Reaktion | LED's schalten gemäss Timer ein | 
+| tatsächliche Reaktion | LED's schalten ein, je nach Prio des Timers kann es aber sein, dass Bereits höherwertige Timer diesen übersteuern. |
+| Fazit | Funktioniert |
+
+---
+
+| Testnummer | 12 |
+|:-----------------|:---:|
+| zu testendes Feature | Timer |
+| Bemerkung | Anwendung |
+| Ausgangskriterien | Der Timer ist aktiv und beendet sich |
+| zu testende Handlung | Endzeit stimmt mit Timer überein, Timer beendet sich  | 
+| erwartete Reaktion | LED's schalten ab | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Timer beendet sich, Strip zeigt andere, tiefer priorisierte LED's an |
+
+---
+
+| Testnummer | 13 |
+|:-----------------|:---:|
+| zu testendes Feature | Priorität, wenn mehrere Aktionen gleichzeitig ausgeführt werden |
+| Bemerkung | Anwendung |
+| Ausgangskriterien |Timer ist aktiv, Bewegungsmelder hat keine Bewegung erkannt |
+| zu testende Handlung | Timer hat eine höhere Prio als der Bewegungsmelder, die Leds für den Bewegungsmelder, dürfen die anderen nicht überschreiben  | 
+| erwartete Reaktion | nichts passiert | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Strip müsste nicht neu geschrieben werden, da keine Änderungen vorhanden sind. Wird zur Sicherheit den noch neu geschrieben. |
+
+
+---
+
+| Testnummer | 14 |
+|:-----------------|:---:|
+| zu testendes Feature | Dimmer zunehmend |
+| Bemerkung | Anwendung |
+| Ausgangskriterien | Timer ist aktiv, hat gerade eingeschaltet und ist auf "immer heller werden" konfiguriert |
+| zu testende Handlung | Led's sollten immer heller werden  | 
+| erwartete Reaktion | Led's sollten immer heller werden | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Zeitintervall zum heller werden ist momentan fix |
+
+
+---
+
+| Testnummer | 15 |
+|:-----------------|:---:|
+| zu testendes Feature | Dimmer zunehmend |
+| Bemerkung | Anwendung |
+| Ausgangskriterien | Timer ist aktiv, hat gerade eingeschaltet und ist auf "immer dünkler werden" konfiguriert |
+| zu testende Handlung | Led's sollten immer dünkler werden| 
+| erwartete Reaktion | Led's sollten immer dünkler werden | 
+| tatsächliche Reaktion | wie erwartet |
+| Fazit | Zeitintervall zum heller werden ist momentan fix |
 
 ## Fazit
 Das Projekt hat sich als sehr softwarelastig herausgestellt. Die ursprüngliche Idee, ein Wakeup-Light zu erstellen, hat sich schnell als relativ einfach implementierbar herausgestellt. Komplexität gewann das Projekt durch die Anforderung möglichst erweiterbar zu sein. Dieser Wunsch nach Erweiterbarkeit schlug sich schnell im Softwaredesign nieder und verursache erheblichen Mehraufwand in der Implementation. Die guten libraries für den Raspberry PI haben sehr deutlich gezeigt, dass die Hardware in einem solchen Projekt, nicht das Problem ist, sondern die Software dahinter. 
