@@ -108,6 +108,14 @@ rm -rf $CATALINA_BASE/webapps/$context.war
 cp $warFile $CATALINA_BASE/webapps/$context.war
 chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 
+
+#fuer Treiber benoetigt 
+echo "install python-mysqldb...."
+apt-get install -y python-mysqldb
+
+
+
+
 systemctl restart $tomcat_version
 
 ### Installing Python Tools
