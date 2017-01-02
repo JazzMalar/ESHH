@@ -7,3 +7,7 @@ anzLEDs         = 50
 
 #debugMode: nur einschalten, wenn an einem PC getestet wird und keine Ausgabe über spi gewünscht wird
 debugMode       = True
+
+
+[api-config]
+api = http://178.83.203.182:8080/api
