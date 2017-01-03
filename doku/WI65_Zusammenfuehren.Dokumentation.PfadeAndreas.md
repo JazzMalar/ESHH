@@ -33,7 +33,7 @@ Mit einem Raspberry Pi als Controller und einem LED-Strip wird ein Wake-Up Light
 4. Das Wake-Up Light ist durch Knopfdruck einschaltbar und dient so als eine normale Zimmerbeleuchtung. 
 
 ### Kontextdiagramm
-![Kontextdiagramm Wake-Up Light](/home/andreas/Dokumente/ESHH/ESHH/doku/Kontextdiagramm.png)
+![Kontextdiagramm Wake-Up Light](/home/andreas/Dokumente/ESHH/ESHH/doku/Kontextdiagramm.jpeg)
 
 ### Zeitplan
 #### Rahmenbedingungen
@@ -66,18 +66,18 @@ Um das Projekt WakeUp-Light besser zu koordinieren wurde das Vorhaben in fünf P
 
 Zu jeder Phase wurden terminierte und beschriebene Work Items erstellt. Jedes Work Item stellt eine unabhängig, abschliessbare Arbeitseinheit ein. Die Projektteilnehmer können sich für Work Items selbstständig eintragen und sind dann dafür verantwortlich, sie bis zum Endtermin abzuliefern. Zurzeit besteht das Projekt aus 49 Work Items die bis zum Abschluss der Phase 3 reichen.  
 
-![Auszug Projektplan](/home/andreas/Dokumente/ESHH/ESHH/doku/WI29_Abgabe.Design_Projektplan.PNG)
+![Auszug Projektplan](/home/andreas/Dokumente/ESHH/ESHH/doku/WI29_Abgabe.Design_Projektplan.jpeg)
 
 
 ### Use Case Diagramme
 Beim entwerfen der Klassendiagramme wurde auf den bestehenden Use Cases aus der Analysephase aufgebaut. Die Use Cases wurden wo sinnvoll erweitert, umbenannt oder ergänzt um möglichst stimmig für den Endbenutzer und die Entwickler zu sein. 
 
-![WI28_UseCase.Diagramm](/home/andreas/Dokumente/ESHH/ESHH/doku/WI28_UseCase.Diagramm.png)
+![WI28_UseCase.Diagramm](/home/andreas/Dokumente/ESHH/ESHH/doku/WI28_UseCase.Diagramm.jpeg)
 
 ### Datenmodell
 Das Datenmodell stellt die persistente Datenhaltung in der Datenbank dar. Der Treiberlayer zieht Aufträge aus der Datenbank und der Middlewarelayer schreibt Aufträge in die Datenbank und liest Informationen zur Anzeige aus der Datenbank. 
 
-![ERDDiagram](/home/andreas/Dokumente/ESHH/ESHH/doku/ERDDiagram.png)
+![ERDDiagram](/home/andreas/Dokumente/ESHH/ESHH/doku/ERDDiagram.jpeg)
 
 Für jedes anzusprechende Device gibt es einen Eintrag in der Tabelle «Device». Dort wird ein ID-String abgelegt, über den man das Gerät auf allen Schichten eindeutig identifizieren kann. Zu jeder Zeile in «Device» gibt es eine eigene Tabelle «DeviceAction_<ID_STRING>». Dort werden die Parameter des Device abgelegt. Im Falle unseres LED-Strips sind das die Start- und Endhelligkeit, die Start- und Endfarbe sowie die Anzahl der LEDs (bzw. Pixel).
  
@@ -110,19 +110,19 @@ Die volle Spezifikation befindet sich in der Projektablage als Excel-Datei.
 
 ##### SOAP Requests
 Nachfolgend ist eine Übersicht der zu den Operations gehörigen Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Requests](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_Requests.PNG) 
+![WI27_WebService.Definition_Requests](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_Requests.jpeg) 
 
 
 ##### SOAP Responses
 Nachfolgend ist eine Übersicht der zu den Operations gehörigen Responses abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Responses](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_Responses.PNG) 
+![WI27_WebService.Definition_Responses](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_Responses.jpeg) 
 
 
 ### Klassendiagramme
 Die nachfolgend gezeigten Klassendiagramme basieren auf dem oben dargestellten Datenmodell sowie der Web Service Spezifikation. 
 
 #### Treiberlayer
-![WI20_Klassendiagramm.Treiberlayer](/home/andreas/Dokumente/ESHH/ESHH/doku/WI20_Klassendiagramm.Treiberlayer.png)
+![WI20_Klassendiagramm.Treiberlayer](/home/andreas/Dokumente/ESHH/ESHH/doku/WI20_Klassendiagramm.Treiberlayer.jpeg)
 
 Das Klassendiagramm sieht einen Linux-Daemon vor, der die Hauptlogik enthält. Dieser erstellt einen DBHandler, der regelmässig alle Aufgaben aus der Datenbank lädt. Der DBHandler selektiert alle Tasks die 
 1. Aktiv sind, 
@@ -133,7 +133,7 @@ Das Klassendiagramm sieht einen Linux-Daemon vor, der die Hauptlogik enthält. D
 und schickt diese an den MainService als «BaseTask» zurück. Jetzt wird ein Task für jedes anzusprechende Device erstellt. Der MainService ruft für jeden so erstellten Task, die TaskFactory mit «specialize» auf. «Specialize» versucht anhand der StringID, das richtige POCO-Objekt zu erstellen (Task_WS2801) und gibt dieses zurück. Dieses Objekt wird nun im MainService in der «taskList» abgespeichert. Für jeden Task in der taskList wird nun die DriverFactory mit der StringID des Tasks aufgerufen. Die DriverFactory versucht das richtige Driver-Objekt zu erstellen («Driver_WS2801») und gibt dieses als BaseDriver Objekt zurück. Der MainService ruft nun auf dem BaseDriver-Objekt mittels Polymorphismus die «execute» Funktion auf. Die Execute-Funktion ist in jedem expliziten Driver «Driver_WS2801» implementiert und enthält den Scriptaufruf mit den Angaben aus dem jeweiligen Task (Task_WS2801) Objekt.
 
 #### Middlewarelayer
-![WI21_Klassendiagramm.Middleware](/home/andreas/Dokumente/ESHH/ESHH/doku/WI21_Klassendiagramm.Middleware.PNG)
+![WI21_Klassendiagramm.Middleware](/home/andreas/Dokumente/ESHH/ESHH/doku/WI21_Klassendiagramm.Middleware.jpeg)
 Der SoapHandler schickt bei Bedarf WebService Requests an Komponenten die per Web Service angebunden sind (LIFX) und empfängt WebService Requests, die für das WakeUp-Light gedacht sind. Er implementiert die oben spezifizierten WebService Operationen. 
 
 Der DBProxy übernimmt die Kommunikation zur Datenbank. Der SoapHandler ist dafür zuständig, dass er seine Requests richtig interpretiert und die richtige Funktion auf dem DBProxy aufruft. 
@@ -143,12 +143,12 @@ Der SoapProxy übernimmt die tatsächlichen Verbindungsdetails und Netzwerktechn
 ### Testplan
 Die im Design ausgearbeitete Spezifikation beinhaltet bereits einiges an Funktionalität. Um diese Funktionalität testen zu können, wurde ein spezifischer Testplan erstellt, der die in der Analyse und dem Design ausgearbeiteten Features abdecken soll. Der Testplan wird im Projektrepository als Excel-Datei geführt und ist hier nur auszugsweise als Beispiel aufgeführt. 
 
-![WI25_Erstellen_Testplan_Auszug](/home/andreas/Dokumente/ESHH/ESHH/doku/WI25_Erstellen_Testplan_Auszug.PNG)
+![WI25_Erstellen_Testplan_Auszug](/home/andreas/Dokumente/ESHH/ESHH/doku/WI25_Erstellen_Testplan_Auszug.jpeg)
 
 ### Schaltungsentwurf
 Die Schaltung zeigt, wie das Hauptweckmedium (die LED-Pixelkette WS2801) an den Raspberry PI angeschlossen wird. Die Applikation sieht vor, dass auch andere Geräte angeschlossen und angesteuert werden können. 
 
-![WI26_Erstellen.Schaltungsentwurf](/home/andreas/Dokumente/ESHH/ESHH/doku/WI26_Erstellen.Schaltungsentwurf.png)
+![WI26_Erstellen.Schaltungsentwurf](/home/andreas/Dokumente/ESHH/ESHH/doku/WI26_Erstellen.Schaltungsentwurf.jpeg)
 
 ## Implementation
 
@@ -167,21 +167,21 @@ Nach dem  Design im Team entschieden den WebService - anstatt wie in der Analyse
 
 ##### GET Operations
 Nachfolgend ist eine Übersicht der zu den Operations gehörigen GET-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Requests](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_GET.PNG)
+![WI27_WebService.Definition_Requests](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_GET.jpeg)
 
 
 ##### POST Operations
 Nachfolgend ist eine Übersicht der zu den Operations gehörigen POST-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Responses](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_POST.PNG)
+![WI27_WebService.Definition_Responses](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_POST.jpeg)
 
 ##### DELETE Operations
 Nachfolgend ist eine Übersicht der zu den Operations gehörigen DELETE-Requests abgebildet. Das Bild ist ein statisches Beispiel. Die Dokumentation wird in der Projektablage in der Excel-Datei nachgeführt. 
-![WI27_WebService.Definition_Responses](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_DELETE.PNG)
+![WI27_WebService.Definition_Responses](/home/andreas/Dokumente/ESHH/ESHH/doku/WI27_WebService.Definition_DELETE.jpeg)
 
 ### Aktualisierte Klassendiagramme
 
 #### Middlewarelayer
-![WI60_Nachfuehren.Design_Middleware](/home/andreas/Dokumente/ESHH/ESHH/doku/WI60_Nachfuehren.Design_Middleware.PNG) 
+![WI60_Nachfuehren.Design_Middleware](/home/andreas/Dokumente/ESHH/ESHH/doku/WI60_Nachfuehren.Design_Middleware.jpeg) 
 
 **Resources**  
 Die Ressourcen sind die Endpunkte des REST Web Service. Für jede ansprechbare Seite, existiert ein Endpunkt. Anfragen an diese Endpunkte verarbeitet die JAX-RS Referenzimplementation Jersey und stellt die jeweiligen Requestparameter mittels Autoboxing den Resource-Klassen zur Verfügung. In diesen Resource-Klassen, sind dann die Java-Methoden implementiert, die das tatsächliche "doing" auf Serverebene ausführen. 
@@ -200,7 +200,7 @@ In der tatsächlichen Implementation wird der SQL-Code umgesetzt, um die im Inte
 Die Modelklassen sind die Mappingcontainer für die Verwendung der relationalen Daten aus der Datenbank in der objekt-orientierten Welt. 
 
 #### Treiberlayer Model
-![WI61_Treiber_Diagramm](/home/andreas/Dokumente/ESHH/ESHH/doku/WI61_Treiber_Diagramm.png) 
+![WI61_Treiber_Diagramm](/home/andreas/Dokumente/ESHH/ESHH/doku/WI61_Treiber_Diagramm.jpeg) 
 **Klasse LED**  
 Beinhaltet die Grundlogik und Funktionen für jedes LED. Die Werte für Rot, Grün, Blau können einzeln oder zusammen gesetzt werden. Zusätzlich wird als Boolean abgespeichert ob eine neue Farbe gesetzt wurde. Nach jedem abfragen der aktuellen Farbe wird der Boolean wieder auf False gesetzt. So könnten theoretisch nur die LED's mit neuer Farbe aktualisiert werden.
 
@@ -215,7 +215,7 @@ LEDStrip bildet den pyhsischen Strip ab. Die Klasse besitzt ein Array mit der An
 
 
 #### Treiberlayer Middlelayer
-![WI61DriverMiddlelayer](/home/andreas/Dokumente/ESHH/ESHH/doku/WI61DriverMiddlelayer.png) 
+![WI61DriverMiddlelayer](/home/andreas/Dokumente/ESHH/ESHH/doku/WI61DriverMiddlelayer.jpeg) 
 **Treiber Middlelayer**
 
 Über die API-Klasse werden die Daten der DB Abgefragt. Alle Requests greifen auf die API’s zu. Ursprünglich war vorgesehen, die Daten direkt aus der Datenbank zu beziehen. Dies hätte aber dazu geführt, dass die Weckgeräte stark an die Datenbank gekoppelt gewesen wären - und ein Architekturwechsel in der Datenbank immer Folgen für jedes Weckgerät gehabt hätte. Tests mit dem Web Service haben gezeigt, dass dieser schnell und zuverlässig genug reagiert, dass die Weckgeräte ihre Daten ebenfalls darüber beziehen können. Für jede der einzelnen API’s wurde eine Hilfsklasse erstellt, damit die Daten einfach gespeichert und abgefragt werden können. 
@@ -223,7 +223,7 @@ Zusätzlich existiert eine Klasse Alarm. In dieser wird der Alarm abgebildet.
 
 Das folgende Ablaufdiagramm zeigt, wie der Treiberlayer entscheidet, ob eines seiner angeschlossenen Geräte jetzt aktiviert werden soll. 
 
-![WI61ActivityDiagramm](/home/andreas/Dokumente/ESHH/ESHH/doku/WI61ActivityDiagramm.png)
+![WI61ActivityDiagramm](/home/andreas/Dokumente/ESHH/ESHH/doku/WI61ActivityDiagramm.jpeg)
 
 ### Verwendete Frameworks, Abhängigkeiten und Libraries
 Zur Effizienten Umsetzung wurden Libraries und Frameworks eingesetzt. Nachfolgend sind diese externen Abhängigkeiten nach Layer aufgeteilt aufgelistet. 
@@ -593,7 +593,7 @@ Das Projekt Wakeup-Light wurde - ganz im Geiste des Fernstudiums - komplett "Rem
 Der Projektplan ist [hier](https://docs.google.com/spreadsheets/d/1FavRmBRhkSZag9ZJz7cpUHyRiqEvQwWesLXLay4Id8w/edit?usp=sharing) einsehbar. 
 
 ### Projektbeteiligung
-![WI65_Kennzahlen](/home/andreas/Dokumente/ESHH/ESHH/doku/WI65_Kennzahlen.PNG) 
+![WI65_Kennzahlen](/home/andreas/Dokumente/ESHH/ESHH/doku/WI65_Kennzahlen.jpeg) 
 Die Grafik zeigt den Beteiligungsverlauf der Projektteilnehmer. Die grünen Zahlen stellen die hinzugefügten Anzahl Zeilen dar, während die Roten, die gelöschten Zeilen darstellen. Die objektorientierten Analyse & Design Dokumente wurden in einem Format gespeichert, dass die grafischen Elemente textuell beschreibt. So stehen diese Design Dokumente als Textdokumente (JSON) zur Verfügung. Dies hat aber den Nachteil, dass mit der initialen Erstellung dieser Dokumente eine enorm hohe Anzahl an Zeilen (~36'000) erstellt wurden. Dieser Fakt zeigt sich in dieser Endauswertung sehr deutlich.    
 
 ### Ausfall Teammitglied
