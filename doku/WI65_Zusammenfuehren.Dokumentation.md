@@ -27,6 +27,8 @@ Mit einem Raspberry Pi als Controller und einem LED-Strip wird ein Wake-Up Light
 
 #### Optional mit Helligkeitssensor
  3. Das Wake-Up Light schaltet das Leuchtmittel nur ein, wenn es nicht bereits hell in der Umgebung ist.
+ 
+####Optional mit Taster
 4. Das Wake-Up Light ist durch Knopfdruck einschaltbar und dient so als eine normale Zimmerbeleuchtung. 
 
 ### Kontextdiagramm
