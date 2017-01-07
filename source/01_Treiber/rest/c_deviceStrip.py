@@ -37,8 +37,8 @@ class deviceWS2801:
 
 
 
-
-# dev = deviceWS2801()
+#####init strip!! um sicher zu gehen, dass der strip einmal mit 0 beschrieben wird!
+dev = deviceWS2801()
 # strip1 = deviceWS2801().getStrip()
 # #
 # dev2 = deviceWS2801()

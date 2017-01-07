@@ -43,7 +43,7 @@ class alarm:
                 self.repeatPatternArr.append( False)
 
     def getTimeArr(self,startTime):
-        print startTime
+        #print "Timer start Time: "+str(startTime)
         startTimeArr = []
         # arr[0] = Stunden, arr[1]=Minuten
         timeSplit = startTime.split(':')

@@ -26,10 +26,10 @@ while True:
         if al.getIsActive():
             if al.getIsWeekdayTrue(int(datetime.datetime.today().weekday())):
                 print "Timer aktiv, Wochentag aktiv"
-                #if(int(al.getMinsToWait()) == 0):
-                print "timer starten"
-                # timer wird nur einmal gestartet, da in der gleichen minute nur einmal das aufgerufen wird!
-                aktiveTimer.append(timerAktiv(apiURL,al.getIdActivationGroup(),al.getIdAlarm(),al.getOffset()))
+                if(int(al.getMinsToWait()) == 0):
+                    print "timer starten"
+                    # timer wird nur einmal gestartet, da in der gleichen minute nur einmal das aufgerufen wird!
+                    aktiveTimer.append(timerAktiv(apiURL,al.getIdActivationGroup(),al.getIdAlarm(),al.getOffset()))
             else :
                 print "Timer aktiv, Wochentag inaktiv"
         else:
@@ -48,6 +48,6 @@ while True:
             aktiveTimer.remove(timer)
     #warten bis naechste min beginnt
     nextmin = 60-(int(datetime.datetime.now().second))
-    print nextmin
+    print "sleep: " +str(nextmin)+"sec"
     time.sleep(nextmin)
 
