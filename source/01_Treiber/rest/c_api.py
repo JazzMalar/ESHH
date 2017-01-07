@@ -13,10 +13,12 @@ class callApi:
 
     def getDatas(self):
         try:
+            print "request "+str(self.apiUrl+"/"+self.apiName)
             resp = requests.get(self.apiUrl+"/"+self.apiName) # 'http://localhost:8080/api/alarms'
             if resp.status_code != 200:
+                print "requesturl: "+str(self.apiUrl+"/"+self.apiName)+" status_code:"+str(resp.status_code)
                 # This means something went wrong.
-                raise ApiError('GET /tasks/ {}'.format(resp.status_code))
+                #raise ApiError('GET /tasks/ {}'.format(resp.status_code))
             dom = parseString(resp.content)
             for i in dom.documentElement.childNodes:
                 self.saveDatas.append(self.readOut(i))
@@ -40,9 +42,9 @@ class callApi:
                 for child in dom.childNodes:
                     dict = self.readOut(child)
                     if bool(dict):
-                        print dict
+                        #print dict
                         bigdict.update(dict)
-                        print bigdict
+                        #print bigdict
                 return bigdict
         else:
             try:

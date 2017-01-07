@@ -3,11 +3,12 @@
 stripType       = LPD6803
 
 #anzLEDs: wie viele Leds können einzeln angesteuert werden
-anzLEDs         = 50
+anzLEDs         = 160
 
 #debugMode: nur einschalten, wenn an einem PC getestet wird und keine Ausgabe über spi gewünscht wird
 debugMode       = True
 
 
 [api-config]
-api = http://178.83.203.182:8080/api
+#api = http://178.83.203.182:8080/api/
+api = http://192.168.123.228:8080/api

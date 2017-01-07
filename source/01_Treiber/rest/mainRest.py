@@ -14,7 +14,7 @@ apiURL =  config.getConfigParam("api")
 
 alarms = callApi(apiURL,"alarms")
 print alarms.getArray()
-print alarms.checkAlarms(alarms.getArray())
+#print alarms.checkAlarms(alarms.getArray())
 alarmObj = []
 aktiveTimer = []
 for al in alarms.checkAlarms(alarms.getArray()):
@@ -22,7 +22,6 @@ for al in alarms.checkAlarms(alarms.getArray()):
     alarmObj.append(alarm(al["startTime"],al["repeatPattern"],al["alarmId"],al["enabled"],al["actionGroup"],al["offset"]))
 
 while True:
-    before = datetime.datetime.now()
     for al in alarmObj:
         if al.getIsActive():
             if al.getIsWeekdayTrue(int(datetime.datetime.today().weekday())):
@@ -47,10 +46,8 @@ while True:
                 timer.writeStrip()
             #timer wird nicht mehr gebraucht
             aktiveTimer.remove(timer)
+    #warten bis naechste min beginnt
+    nextmin = 60-(int(datetime.datetime.now().second))
+    print nextmin
+    time.sleep(nextmin)
 
-    after = datetime.datetime.now()
-    timecalc = (after - before)
-    secondsdiff = timecalc.seconds
-    #Todo auf anfang der naechsten Minute warten!
-    if secondsdiff < 60:
-        time.sleep(60-secondsdiff)

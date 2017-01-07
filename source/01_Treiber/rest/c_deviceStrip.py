@@ -21,6 +21,8 @@ class deviceWS2801:
             #self.strip = LEDStrip(ledConfig.getConfigParam("anzleds"), ledConfig.getConfigParam("striptype"),ledConfig.getConfigParam("debugmode"))
             self.strip = LEDStrip(self.deviceActions.getFieldValue("NumLeds"), self.ws2801['stringId'],
                                   ledConfig.getConfigParam("debugmode"))
+            #init strip
+            self.getStrip().setColorToStrip()
         def getStrip(self):
             return self.strip
 

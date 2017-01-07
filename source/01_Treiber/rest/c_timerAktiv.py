@@ -2,6 +2,7 @@ from c_actionGroupMember import actionGroupMembers
 from c_deviceActions import deviceActions
 from c_deviceStrip  import deviceWS2801
 import uuid, datetime,random
+from c_api import callApi
 
 class timerAktiv:
 
@@ -96,7 +97,15 @@ class timerAktiv:
                 self.colorNow.setColor(color,calculate)
 
     def run(self):
-        print "timer run uuid: "+str(self.uuid)
+        print "timer run uuid: " + str(self.uuid)
+        api = callApi(self.apiUrl,"alarms?AlarmID="+str(self.alarmId))
+        for i in api.getArray():
+            print i
+            if i["alarmId"] == str(self.alarmId):
+                if i["enabled"].lower() == "false":
+                    #alarm wurde abgeschaltet!
+                    self.strip.removeLEDUsedByFullStrip(self.uuid)
+                    self.activ = False
         now = datetime.datetime.now()
         timecalc = (now-self.oldTime)
         min = (timecalc.seconds/60)%60

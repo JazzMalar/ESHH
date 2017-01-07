@@ -35,4 +35,4 @@ class actionGroupMembers:
     def getAGPArr(self):
         return self.AGM
 
-a = actionGroupMembers('http://178.83.203.182:8080/api','actiongroupmembers?GroupID=1')
+#a = actionGroupMembers('http://178.83.203.182:8080/api','actiongroupmembers?GroupID=1')

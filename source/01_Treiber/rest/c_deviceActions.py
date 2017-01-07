@@ -43,4 +43,4 @@ class deviceActions:
 
 
 
-a = deviceActions('http://178.83.203.182:8080/api','deviceactions?StringID=WS2801_01&ID=1')
+#a = deviceActions('http://178.83.203.182:8080/api','deviceactions?StringID=WS2801_01&ID=1')
