@@ -90,6 +90,7 @@ class LEDStrip(object):
         return self.debug
 
     def setColorToStrip(self):
+        print "setColorToStrip()"
         # 3 bytes per pixel
         PIXEL_SIZE = 3
         PIXEL_SIZE_SM16716 = 4
