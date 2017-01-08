@@ -113,9 +113,7 @@ chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 echo "install python-mysqldb...."
 apt-get install -y python-mysqldb
 
-
-
-
+systemctl restart $mysql_version
 systemctl restart $tomcat_version
 
 ### Installing Python Tools
