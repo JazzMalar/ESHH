@@ -47,12 +47,16 @@ public interface IDBProxy
 
 	void RemoveDevice(int deviceId);
 
-	void ActivateNightLight(String stringId, int id);
+	ActionGroup ActivateNightLight(String stringId);
 
-	void DisableNightLight(String stringId, int id);
+	ActionGroup DisableNightLight(String stringId);
 
 	void ActivateActionGroup(int groupId);
 
 	void DisableActionGroup(int groupId);
+
+	List<ActionGroup> GetActiveNightLights();
+
+	List<ActionGroup> GetActiveActionGroups();
 
 }

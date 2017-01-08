@@ -2,10 +2,14 @@ package ch.ffhs.eshh.wakeuplight.model;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class ActionGroup
 {
 	private int groupId;
 	private List<ActionGroupMember> members;
+	private boolean inTime;
 
 	public ActionGroup()
 	{
@@ -16,6 +20,7 @@ public class ActionGroup
 	{
 		this.groupId = groupId;
 		this.members = members;
+		this.inTime = false;
 	}
 
 	public int getGroupId()
@@ -51,6 +56,16 @@ public class ActionGroup
 	public void removeMember(int member)
 	{
 		this.members.remove(member);
+	}
+
+	public boolean isInTime()
+	{
+		return this.inTime;
+	}
+
+	public void setInTime(boolean inTime)
+	{
+		this.inTime = inTime;
 	}
 
 }

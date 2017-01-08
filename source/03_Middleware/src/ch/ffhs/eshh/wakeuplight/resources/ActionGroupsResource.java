@@ -1,5 +1,8 @@
 package ch.ffhs.eshh.wakeuplight.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -8,6 +11,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
+
+import ch.ffhs.eshh.wakeuplight.data.DBProxyFactory;
+import ch.ffhs.eshh.wakeuplight.model.ActionGroup;
 
 @Path("/actiongroup")
 public class ActionGroupsResource
@@ -20,21 +26,35 @@ public class ActionGroupsResource
 	Request request;
 
 	@GET
+	@Produces(MediaType.TEXT_XML)
+	public List<ActionGroup> getActiveActionGroups()
+	{
+		List<ActionGroup> actionGroups = new ArrayList<ActionGroup>();
+		actionGroups = DBProxyFactory.factory.g().GetActiveActionGroups();
+		return actionGroups;
+
+	}
+
+	@GET
 	@Path("/activate")
 	@Produces(MediaType.TEXT_XML)
-	public int activateActionGroup(@QueryParam("GroupID") String groupId)
+	public void activateActionGroup(@QueryParam("GroupID") int groupId)
 	{
-		return 0;
-
+		if (groupId > 0)
+		{
+			DBProxyFactory.factory.g().ActivateActionGroup(groupId);
+		}
 	}
 
 	@GET
 	@Path("/disable")
 	@Produces(MediaType.TEXT_XML)
-	public int disableActionGroup(@QueryParam("GroupID") String groupId)
+	public void disableActionGroup(@QueryParam("GroupID") int groupId)
 	{
-		return 0;
-
+		if (groupId > 0)
+		{
+			DBProxyFactory.factory.g().DisableActionGroup(groupId);
+		}
 	}
 
 }

@@ -2,6 +2,7 @@
 package ch.ffhs.eshh.wakeuplight.data;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -375,30 +376,158 @@ public class MySQLDBProxy implements IDBProxy
 	}
 
 	@Override
-	public void ActivateNightLight(String stringId, int id)
+	public ActionGroup ActivateNightLight(String stringId)
 	{
-		// TODO Auto-generated method stub
+		ActionGroup result = new ActionGroup();
+
+		try
+		{
+
+			List<Object[]> os = run.query("select idActionGroup from Nightlight where triggerDevice = ?",
+			        ResultSetFactory.factory.ObjectResultHandler(), stringId);
+
+			int actionGroupId = (int) os.get(0)[0];
+
+			run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,1)", actionGroupId);
+
+			result = GetActionGroup(actionGroupId);
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Insert" + e.getMessage());
+		}
+
+		return result;
 
 	}
 
 	@Override
-	public void DisableNightLight(String stringId, int id)
+	public ActionGroup DisableNightLight(String stringId)
 	{
-		// TODO Auto-generated method stub
+		ActionGroup result = new ActionGroup();
 
+		try
+		{
+
+			List<Object[]> os = run.query("select idActionGroup from Nightlight where triggerDevice = ?",
+			        ResultSetFactory.factory.ObjectResultHandler(), stringId);
+
+			int actionGroupId = (int) os.get(0)[0];
+			run.update("delete from ActiveActionGroups where idActionGroup = ? AND isNightlight = 1", actionGroupId);
+
+			result = GetActionGroup(actionGroupId);
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
+
+		return result;
 	}
 
 	@Override
 	public void ActivateActionGroup(int groupId)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+
+			run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,0)", groupId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Insert" + e.getMessage());
+		}
 
 	}
 
 	@Override
 	public void DisableActionGroup(int groupId)
 	{
-		// TODO Auto-generated method stub
+		try
+		{
 
+			run.update("delete from ActiveActionGroups where idActionGroup = ? and isNightlight = 0", groupId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
+
+	}
+
+	@Override
+	public List<ActionGroup> GetActiveNightLights()
+	{
+
+		List<ActionGroup> actionGroups = new ArrayList<ActionGroup>();
+
+		try
+		{
+			List<Object[]> os = run.query("SELECT idActionGroup FROM mydb.ActiveActionGroups WHERE isNightlight = 1",
+			        ResultSetFactory.factory.ObjectResultHandler());
+
+			for (Object[] o : os)
+			{
+				int groupId = (int) o[0];
+
+				List<ActionGroupMember> agm = run.query(
+				        "select idActionGroupMember, idGroup, idDevice, idAction, offset from ActionGroupMember WHERE idGroup = ?",
+				        ResultSetFactory.factory.AGMResultHandler(), groupId);
+				ActionGroup ag = new ActionGroup(groupId, agm);
+				actionGroups.add(ag);
+			}
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Select " + e.getMessage());
+		}
+
+		return actionGroups;
+
+	}
+
+	@Override
+	public List<ActionGroup> GetActiveActionGroups()
+	{
+		List<ActionGroup> actionGroups = new ArrayList<ActionGroup>();
+
+		LocalDate date = LocalDate.now();
+		int day = date.getDayOfWeek().getValue();
+
+		StringBuilder repeatPattern = new StringBuilder("0000000");
+		repeatPattern.setCharAt(day - 1, '1');
+
+		try
+		{
+			List<Object[]> os = run.query(
+			        "SELECT idActionGroup as groupId, 0 as alarm FROM ActiveActionGroups WHERE isNightlight = 0 UNION SELECT idActionGroup as groupId, active as alarm FROM mydb.Alarm where repeatPattern & ? and StartTime < TIME(NOW()) and date_sub(now(), INTERVAL 10 MINUTE) > StartTime and Active = 1",
+			        ResultSetFactory.factory.ObjectResultHandler(), repeatPattern.toString());
+
+			for (Object[] o : os)
+			{
+				int groupId = (int) o[0];
+				int isAlarm = ((Long) o[1]).intValue();
+
+				List<ActionGroupMember> agm = run.query(
+				        "select idActionGroupMember, idGroup, idDevice, idAction, offset from ActionGroupMember WHERE idGroup = ?",
+				        ResultSetFactory.factory.AGMResultHandler(), groupId);
+				ActionGroup ag = new ActionGroup(groupId, agm);
+				if (isAlarm > 0)
+				{
+					ag.setInTime(true);
+				}
+				actionGroups.add(ag);
+			}
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Select " + e.getMessage());
+		}
+
+		return actionGroups;
 	}
 }
