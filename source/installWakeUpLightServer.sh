@@ -98,7 +98,7 @@ fi
 
 ip=$(hostname -I)
 echo "[mysqld]"	> /etc/mysql/conf.d/wakeuplight.cnf
-echo "bind-address 	= $ip" >> /etc/mysql/conf.d/wakeuplight.cnf
+echo "bind-address = 0.0.0.0" >> /etc/mysql/conf.d/wakeuplight.cnf
 
 echo "adding test data to database mydb..."
 mysql --user=root --password=eshh < $sqlFile
@@ -113,7 +113,7 @@ chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 echo "install python-mysqldb...."
 apt-get install -y python-mysqldb
 
-systemctl restart $mysql_version
+systemctl restart mysql
 systemctl restart $tomcat_version
 
 ### Installing Python Tools
