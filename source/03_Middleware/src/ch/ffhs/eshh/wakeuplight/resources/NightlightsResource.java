@@ -44,7 +44,7 @@ public class NightlightsResource
 		List<ActionGroupMember> actionGroupMembers = new ArrayList<ActionGroupMember>();
 		ActionGroup g = null;
 
-		if (stringId.length() > 0)
+		if (stringId != null && stringId.length() > 0)
 		{
 			g = DBProxyFactory.factory.g().ActivateNightLight(stringId);
 			if (g != null && g.getGroupId() > 0)
@@ -63,7 +63,7 @@ public class NightlightsResource
 		List<ActionGroupMember> actionGroupMembers = new ArrayList<ActionGroupMember>();
 		ActionGroup g = null;
 
-		if (stringId.length() > 0)
+		if (stringId != null && stringId.length() > 0)
 		{
 			g = DBProxyFactory.factory.g().DisableNightLight(stringId);
 			if (g != null && g.getGroupId() > 0)
@@ -71,6 +71,44 @@ public class NightlightsResource
 				actionGroupMembers.addAll(g.getMembers());
 			}
 		}
+		return actionGroupMembers;
+	}
+
+	@GET
+	@Path("/associate")
+	public List<ActionGroupMember> associateNightlight(@QueryParam("StringID") String stringId,
+	        @QueryParam("GroupID") int groupId)
+	{
+		List<ActionGroupMember> actionGroupMembers = new ArrayList<ActionGroupMember>();
+
+		if (stringId != null && stringId.length() > 0 && groupId > 0)
+		{
+			ActionGroup g = (DBProxyFactory.factory.g().AssociateNightLight(stringId, groupId));
+			if (g.getGroupId() > 0)
+			{
+				actionGroupMembers.addAll(g.getMembers());
+			}
+		}
+
+		return actionGroupMembers;
+	}
+
+	@GET
+	@Path("/disassociate")
+	public List<ActionGroupMember> disassociateNightlight(@QueryParam("StringID") String stringId,
+	        @QueryParam("GroupID") int groupId)
+	{
+		List<ActionGroupMember> actionGroupMembers = new ArrayList<ActionGroupMember>();
+
+		if (stringId != null && stringId.length() > 0 && groupId > 0)
+		{
+			ActionGroup g = (DBProxyFactory.factory.g().DisassociateNightLight(stringId, groupId));
+			if (g.getGroupId() > 0)
+			{
+				actionGroupMembers.addAll(g.getMembers());
+			}
+		}
+
 		return actionGroupMembers;
 	}
 

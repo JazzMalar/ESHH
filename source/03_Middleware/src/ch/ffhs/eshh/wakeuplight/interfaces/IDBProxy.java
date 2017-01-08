@@ -59,4 +59,8 @@ public interface IDBProxy
 
 	List<ActionGroup> GetActiveActionGroups();
 
+	ActionGroup AssociateNightLight(String stringId, int groupId);
+
+	ActionGroup DisassociateNightLight(String stringId, int groupId);
+
 }

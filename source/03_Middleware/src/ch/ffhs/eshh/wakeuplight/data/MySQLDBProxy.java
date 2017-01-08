@@ -530,4 +530,37 @@ public class MySQLDBProxy implements IDBProxy
 
 		return actionGroups;
 	}
+
+	@Override
+	public ActionGroup AssociateNightLight(String stringId, int groupId)
+	{
+
+		try
+		{
+			run.update("insert into Nightlight (idActionGroup, triggerDevice) VALUES (?,?)", groupId, stringId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Insert" + e.getMessage());
+		}
+
+		return GetActionGroup(groupId);
+
+	}
+
+	@Override
+	public ActionGroup DisassociateNightLight(String stringId, int groupId)
+	{
+		try
+		{
+			run.update("delete from Nightlight where idActionGroup = ? and triggerDevice = ?", groupId, stringId);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Fehler beim Delete" + e.getMessage());
+		}
+
+		return GetActionGroup(groupId);
+
+	}
 }
