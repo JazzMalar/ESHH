@@ -84,7 +84,10 @@ class LEDStrip(object):
         return self.stripType
 
     def __setDebug(self,onOff):
-        self.debug= onOff
+        if onOff == "False":
+            self.debug= False
+        elif onOff == "True":
+            self.debug=True
 
     def __getDebug(self):
         return self.debug
@@ -106,7 +109,7 @@ class LEDStrip(object):
                 pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB_LPD6803()
             else:
                 pixel_output[pixel_offset:] = self.__strip[stripPixel].getRGB()
-            self.__writeStream(pixel_output)
+        self.__writeStream(pixel_output)
 
 
     def __writeStream(self, pixels):
@@ -150,6 +153,7 @@ class LEDStrip(object):
                 b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00') + pixels)
         else:
             if not self.__getDebug():
+
                 spidev.write(pixels)
         if not self.__getDebug():
             spidev.flush()
