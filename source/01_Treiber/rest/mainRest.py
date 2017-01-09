@@ -19,7 +19,6 @@ apiURL =  config.getConfigParam("api")
 aktiveNightlight = []
 def bewegungssensor(pin):
     global pir
-    print "bewegungssensor"
     if treiberConfig.getConfigParam("debugmode").lower() == "false":
         if(GPIO.input(pir)):
             activateNightlight = callApi(apiURL, "nightlight/activate?StringID=WS2801_01")

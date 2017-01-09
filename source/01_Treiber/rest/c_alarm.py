@@ -64,7 +64,7 @@ class alarm:
         now = self.calculateMins(self.getNow())
         startTime = self.calculateMins(self.startTime)
         calculatedTime = startTime - now
-        print "Zeit zu warten bis timer startet: "+str(calculatedTime)
+        print "Zeit zu warten bis timer startet: "+str(calculatedTime)+" alarmId:"+str(self.getIdAlarm())
         return calculatedTime
 
     def getIsWeekdayTrue(self,weekday):
