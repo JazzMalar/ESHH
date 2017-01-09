@@ -84,7 +84,10 @@ class LEDStrip(object):
         return self.stripType
 
     def __setDebug(self,onOff):
-        self.debug = bool(onOff)
+        if onOff.lower() == "false":
+            self.debug= False
+        elif onOff.lower() == "true":
+            self.debug=True
 
     def __getDebug(self):
         return self.debug

@@ -28,6 +28,12 @@ class alarm:
     def getIdActivationGroup(self):
         return self.idActivationGroup
 
+
+    def setActive(self,active):
+        if active.lower() == "true":
+            self.active = True
+        else:
+            self.active = False
    # def updateIsActive(self,active):
         # if active == "true":
         #     return True
