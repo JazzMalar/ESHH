@@ -29,8 +29,8 @@ class deviceActions:
                 dict = fulldict['deviceActions']['deviceAction']['fields'][i]
                 self.fields.append(fields(dict['fieldName'],dict['fieldValue']))
 
-            for i in self.fields:
-                print "Name: "+i.getFieldName() +"; Value: "+i.getFieldValue()
+            #for i in self.fields:
+                #print "Name: "+i.getFieldName() +"; Value: "+i.getFieldValue()
             self.deviceActionId = fulldict['deviceActions']['deviceAction']['deviceActionId']
 
     def getFieldValue(self,fieldName):

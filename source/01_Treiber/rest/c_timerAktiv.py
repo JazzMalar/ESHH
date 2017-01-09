@@ -109,12 +109,13 @@ class timerAktiv:
                     # self.strip.removeLEDUsedByFullStrip(self.uuid)
                     # self.activ = False
                     self.disableAlarm()
+        #Zeitrechnung wird nicht umbedingt benoetigt, da ausserhalb eh auf die naechste min gewartet wird!
         now = datetime.datetime.now()
         timecalc = (now-self.oldTime)
         min = (timecalc.seconds/60)%60
-        print "min: "+str(min)
+        #print "min: "+str(min)
         if min >=1:
-            if (self.nextStep < self.maxStep):
+            if (self.nextStep <= self.maxStep):
                 self.__calculateColor(self.nextStep)
                 self.setStrip(self.colorNow)
                 self.nextStep += 1

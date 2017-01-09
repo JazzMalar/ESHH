@@ -109,9 +109,6 @@ cp $warFile $CATALINA_BASE/webapps/$context.war
 chown -R $tomcat_version:$tomcat_version $CATALINA_BASE/webapps
 
 
-#fuer Treiber benoetigt 
-echo "install python-mysqldb...."
-apt-get install -y python-mysqldb
 
 systemctl restart mysql
 systemctl restart $tomcat_version
