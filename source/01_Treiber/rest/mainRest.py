@@ -16,14 +16,6 @@ pir = False
 
 
 apiURL =  config.getConfigParam("api")
-if treiberConfig.getConfigParam("debugmode").lower() == "false":
-    import RPi.GPIO as GPIO
-    GPIO.setmode(GPIO.BOARD)
-    global pir
-    pir = int(treiberConfig.getConfigParam("pir"))
-    GPIO.setup(pir, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(pir, GPIO.BOTH, callback=bewegungssensor)
-
 aktiveNightlight = []
 def bewegungssensor(pin):
     global pir
@@ -39,6 +31,17 @@ def bewegungssensor(pin):
             actionGroups = actionGroupMembers(apiURL, "nightlight/disable?StringID=WS2801_01")
             for i in aktiveNightlight:
                 i.disableAlarm()
+
+
+
+if treiberConfig.getConfigParam("debugmode").lower() == "false":
+    import RPi.GPIO as GPIO
+    GPIO.setmode(GPIO.BOARD)
+    global pir
+    pir = int(treiberConfig.getConfigParam("pir"))
+    GPIO.setup(pir, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.add_event_detect(pir, GPIO.BOTH, callback=bewegungssensor)
+
 
 
 alarmObj = []
