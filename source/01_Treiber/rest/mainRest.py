@@ -53,6 +53,8 @@ def updateAlarms():
         for alObj in alarmObj:
             if int(al["alarmId"])== alObj.getIdAlarm():
                 vorhanden = True
+                #update, falls Zeit etc geaendert wird!!
+                alObj.updateAlarm(al["startTime"], al["repeatPattern"], al["alarmId"], al["enabled"], al["actionGroup"],al["offset"])
                 break
         if not vorhanden:
             alarmObj.append(alarm(al["startTime"], al["repeatPattern"], al["alarmId"], al["enabled"], al["actionGroup"],al["offset"]))
