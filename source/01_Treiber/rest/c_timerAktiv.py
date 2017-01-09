@@ -47,7 +47,9 @@ class timerAktiv:
 
     def __init__(self,apiUrl,actionGroup,alarmId,offset):
         #Todo, random entfernen
-        self.prio       = random.randint(1, 100)#10
+        if alarmId == "nightlight":
+            self.prio = 1 # tiefste prio
+        self.prio       = 10
         self.uuid       = uuid.uuid4()
         print "timerInit "+str(self.uuid)
         self.activ      = True
@@ -56,7 +58,7 @@ class timerAktiv:
         self.alarmId    = alarmId
         self.offset     = offset
         # wie lange der Timer dauert, 1 step = 1 min
-        self.maxStep  = 30
+        self.maxStep  = 5#30
         self.actionGroupMemberApi = "actiongroupmembers?GroupID="+str(self.actionGroup)
         self.AGMObj     = actionGroupMembers(apiUrl,self.actionGroupMemberApi)
         for i in self.AGMObj.getAGPArr():
@@ -72,7 +74,7 @@ class timerAktiv:
         #Todo hier evt. anzahl LEDs uebergeben!
         self.strip = deviceWS2801().getStrip()
         self.setStrip(self.colorStart)
-        self.nextStep = 2 # erster schritt schon durch
+        self.nextStep = 1
         self.oldTime = datetime.datetime.now()
 
     def setStrip(self,color):
@@ -94,7 +96,7 @@ class timerAktiv:
         for color in colors:
             if (self.colorStart.getColor(color) < self.colorEnd.getColor(color)):
                 calculate = (self.colorEnd.getColor(color) - self.colorStart.getColor(color))/self.maxStep
-                self.colorNow.setColor(color,calculate)
+                self.colorNow.setColor(color,calculate*step)
 
     def run(self):
         print "timer run uuid: " + str(self.uuid)
@@ -104,18 +106,22 @@ class timerAktiv:
             if i["alarmId"] == str(self.alarmId):
                 if i["enabled"].lower() == "false":
                     #alarm wurde abgeschaltet!
-                    self.strip.removeLEDUsedByFullStrip(self.uuid)
-                    self.activ = False
+                    # self.strip.removeLEDUsedByFullStrip(self.uuid)
+                    # self.activ = False
+                    self.disableAlarm()
         now = datetime.datetime.now()
         timecalc = (now-self.oldTime)
         min = (timecalc.seconds/60)%60
+        print "min: "+str(min)
         if min >=1:
             if (self.nextStep < self.maxStep):
                 self.__calculateColor(self.nextStep)
                 self.setStrip(self.colorNow)
-                self.nextStep = self.nextStep + 1
+                self.nextStep += 1
             else:
                 self.strip.removeLEDUsedByFullStrip(self.uuid)
                 self.activ = False
 
-
+    def disableAlarm(self):
+        self.strip.removeLEDUsedByFullStrip(self.uuid)
+        self.activ = False
