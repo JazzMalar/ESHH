@@ -49,7 +49,8 @@ class timerAktiv:
         #Todo, random entfernen
         if alarmId == "nightlight":
             self.prio = 1 # tiefste prio
-        self.prio       = 10
+        else:
+            self.prio       = 10
         self.uuid       = uuid.uuid4()
         print "timerInit "+str(self.uuid)
         self.activ      = True
