@@ -4,6 +4,7 @@ import requests
 def readXml(apiUrl, apiName):
     xml = False
     try:
+        print "request: "+str(apiUrl+"/"+apiName)
         resp = requests.get(apiUrl + "/" + apiName)  # 'http://localhost:8080/api/alarms'
         if resp.status_code != 200:
             # This means something went wrong.

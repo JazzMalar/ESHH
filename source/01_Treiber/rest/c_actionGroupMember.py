@@ -29,7 +29,7 @@ class actionGroupMembers:
         if xml == False:
             return
         fulldict = xmltodict.parse(xml)
-        #print fulldict
+        print fulldict
         #print str(fulldict)
         # print str(fulldict).count('actionGroupMember')/2
         #print fulldict['actionGroupMembers']['actionGroupMember'][0]
@@ -42,11 +42,13 @@ class actionGroupMembers:
                 self.AGM.append(actionGroupMember(fulldict['actionGroupMembers']['actionGroupMember']))
            # print fulldict['actionGroupMembers']['actionGroupMember'][i]
         else:
-            #print int(str(fulldict).count("'actionGroup'"))
-            for i in range(0,int(str(fulldict).count("'actionGroup'"))):
-                #print fulldict['actionGroups']['actionGroup'][i]
-                self.AGM.append(actionGroupMember(fulldict['actionGroups']['actionGroup'][i]))
-
+            count = int(str(fulldict).count("'actionGroup'"))
+            if count > 1:
+                for i in range(0,int(str(fulldict).count("'actionGroup'"))):
+                    #print fulldict['actionGroups']['actionGroup'][i]
+                    self.AGM.append(actionGroupMember(fulldict['actionGroups']['actionGroup'][i]))
+            else:
+                self.AGM.append(actionGroupMember(fulldict['actionGroups']['actionGroup']))
        # for i in self.AGP:
        #     print i.getFromActionGroupMember('offset')
 
