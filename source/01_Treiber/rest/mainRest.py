@@ -22,9 +22,11 @@ def bewegungssensor(pin):
     if treiberConfig.getConfigParam("debugmode").lower() == "false":
         if(GPIO.input(pir)):
             activateNightlight = callApi(apiURL, "nightlight/activate?StringID=WS2801_01")
-            actionGroups = actionGroupMembers(apiURL,"nightlight")
+            actionGroups = actionGroupMembers(apiURL,"nightlight",True)
+            # wird benoetigt, damit tomcat reagieren kann!!
+            time.sleep(0.1)
             for i in actionGroups.getAGPArr():
-                aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMember('offset')))
+                aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMemberMEMBERS('offset')))
         elif GPIO.input(pir) == False:
             actionGroups = actionGroupMembers(apiURL, "nightlight/disable?StringID=WS2801_01")
             for i in aktiveNightlight:
@@ -40,7 +42,7 @@ if treiberConfig.getConfigParam("debugmode").lower() == "false":
     GPIO.setup(pir, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(pir, GPIO.BOTH, callback=bewegungssensor)
 
-
+#bewegungssensor(1)
 
 alarmObj = []
 aktiveTimer = []
