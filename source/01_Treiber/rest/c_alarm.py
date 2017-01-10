@@ -9,7 +9,9 @@ class alarm:
         return self.active
 
     def updateAlarm(self,startTime,repeatPattern,alarmId,active,idActivationGroup,offset):
-        self.startTime = startTime[-9:-4] # Nur Zeit aus startTime auslesen 1970-01-01T08:00:00Z
+        posOfT = startTime.index('T')
+        #self.startTime = startTime[-9:-4] # Nur Zeit aus startTime auslesen 1970-01-01T08:00:00Z
+        self.startTime = startTime[posOfT+1:posOfT+6]
         self.repeatPattern = repeatPattern
         self.alarmId = int(alarmId)
         self.active = bool(active)

@@ -13,7 +13,8 @@ class actionGroupMember:
 
 
 class actionGroupMembers:
-    def __init__(self,apiUrl,apiName):
+    def __init__(self,apiUrl,apiName,nightlight = False):
+        self.nightLight = nightlight
         self.apiUrl = apiUrl
         self.apiName = apiName
         self.AGM = []
@@ -25,9 +26,13 @@ class actionGroupMembers:
         #print str(fulldict)
         # print str(fulldict).count('actionGroupMember')/2
         #print fulldict['actionGroupMembers']['actionGroupMember'][0]
-        for i in range(0,int(str(fulldict).count('actionGroupMember'))/2):
-            self.AGM.append(actionGroupMember(fulldict['actionGroupMembers']['actionGroupMember'][i]))
+        if not nightlight:
+            for i in range(0,int(str(fulldict).count('actionGroupMember'))/2):
+                self.AGM.append(actionGroupMember(fulldict['actionGroupMembers']['actionGroupMember'][i]))
            # print fulldict['actionGroupMembers']['actionGroupMember'][i]
+        else:
+            for i in range(0,int(str(fulldict).count('actionGroup'))/2):
+                self.AGM.append(actionGroupMember(fulldict['actionGroups']['actionGroup'][i]))
 
        # for i in self.AGP:
        #     print i.getFromActionGroupMember('offset')

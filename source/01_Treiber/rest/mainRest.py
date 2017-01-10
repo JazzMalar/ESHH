@@ -22,7 +22,6 @@ def bewegungssensor(pin):
     if treiberConfig.getConfigParam("debugmode").lower() == "false":
         if(GPIO.input(pir)):
             activateNightlight = callApi(apiURL, "nightlight/activate?StringID=WS2801_01")
-            aktiveNightlight.append(timerAktiv(apiURL, ))
             actionGroups = actionGroupMembers(apiURL,"nightlight")
             for i in actionGroups.getAGPArr():
                 aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMember('offset')))
