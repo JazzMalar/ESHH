@@ -9,7 +9,14 @@ class actionGroupMember:
         self.dict = dict
 
     def getFromActionGroupMember(self, name):
-        return str(self.dict[name])
+        ret = str(self.dict[name])
+        print ret
+        return ret
+
+    def getFromActionGroupMemberMEMBERS(self, name):
+        ret = str(self.dict["members"][name])
+        print ret
+        return ret
 
 
 class actionGroupMembers:
@@ -27,11 +34,17 @@ class actionGroupMembers:
         # print str(fulldict).count('actionGroupMember')/2
         #print fulldict['actionGroupMembers']['actionGroupMember'][0]
         if not nightlight:
-            for i in range(0,int(str(fulldict).count('actionGroupMember'))/2):
-                self.AGM.append(actionGroupMember(fulldict['actionGroupMembers']['actionGroupMember'][i]))
+            count = int(str(fulldict).count('actionGroupMember'))/2
+            if count > 1:
+                for i in range(0,int(str(fulldict).count('actionGroupMember'))/2):
+                    self.AGM.append(actionGroupMember(fulldict['actionGroupMembers']['actionGroupMember'][i]))
+            else:
+                self.AGM.append(actionGroupMember(fulldict['actionGroupMembers']['actionGroupMember']))
            # print fulldict['actionGroupMembers']['actionGroupMember'][i]
         else:
-            for i in range(0,int(str(fulldict).count('actionGroup'))/2):
+            #print int(str(fulldict).count("'actionGroup'"))
+            for i in range(0,int(str(fulldict).count("'actionGroup'"))):
+                #print fulldict['actionGroups']['actionGroup'][i]
                 self.AGM.append(actionGroupMember(fulldict['actionGroups']['actionGroup'][i]))
 
        # for i in self.AGP:
