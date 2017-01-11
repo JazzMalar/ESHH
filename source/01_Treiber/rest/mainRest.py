@@ -19,8 +19,24 @@ apiURL =  config.getConfigParam("api")
 aktiveNightlight = []
 def bewegungssensor(pin):
     global pir
+    input = 0
+    ### entprellen
+    for i in range(0,100):
+        if (GPIO.input(pir)):
+            input+=1
+        elif GPIO.input(pir) == False:
+            input-=1
+
+    if input != 0:
+        if input > 0:
+            input = True
+        else:
+            input = False
+    else:
+        input = GPIO.input(pir)
+    ###
     if treiberConfig.getConfigParam("debugmode").lower() == "false":
-        if(GPIO.input(pir)):
+        if(input):
             activateNightlight = callApi(apiURL, "nightlight/activate?StringID=WS2801_01")
             time.sleep(0.2)
             actionGroups = actionGroupMembers(apiURL,"nightlight",True)
@@ -28,7 +44,7 @@ def bewegungssensor(pin):
             # wird benoetigt, damit tomcat reagieren kann!!
             for i in actionGroups.getAGPArr():
                 aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMemberMEMBERS('offset')))
-        elif GPIO.input(pir) == False:
+        elif input == False:
             actionGroups = actionGroupMembers(apiURL, "nightlight/disable?StringID=WS2801_01")
             for i in aktiveNightlight:
                 i.disableAlarm()
@@ -79,6 +95,12 @@ try:
             else:
                 print "Timer inaktiv\n"
 
+        for nightlight in aktiveNightlight:
+            if nightlight.getActiv():
+                nightlight.run()
+            else:
+                #timer wird nicht mehr gebraucht
+                aktiveNightlight.remove(nightlight)
 
         for timer in aktiveTimer:
             if timer.getActiv():
@@ -90,6 +112,13 @@ try:
                     timer.writeStrip()
                 #timer wird nicht mehr gebraucht
                 aktiveTimer.remove(timer)
+
+        if len(aktiveTimer) == 0:
+            if len(nightlight) >0:
+                nightlight[0].writeStrip()
+
+
+
         #warten bis naechste min beginnt
         nextmin = 60-(int(datetime.datetime.now().second))
         print "sleep: " +str(nextmin)+"sec"
