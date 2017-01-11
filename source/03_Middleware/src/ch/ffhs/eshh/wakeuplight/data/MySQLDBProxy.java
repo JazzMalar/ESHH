@@ -388,7 +388,13 @@ public class MySQLDBProxy implements IDBProxy
 
 			int actionGroupId = (int) os.get(0)[0];
 
-			run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,1)", actionGroupId);
+			os = run.query("select idActionGroup from ActiveActionGroups WHERE idActionGroup = ? AND isNightlight = 1", 
+					ResultSetFactory.factory.ObjectResultHandler(), actionGroupId); 
+			
+			if(os == null)
+			{
+				run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,1)", actionGroupId);				
+			}
 
 			result = GetActionGroup(actionGroupId);
 
