@@ -37,6 +37,7 @@ def bewegungssensor(pin):
     ###
     if treiberConfig.getConfigParam("debugmode").lower() == "false":
         if(input):
+            print "On nightlight"
             activateNightlight = callApi(apiURL, "nightlight/activate?StringID=WS2801_01")
             time.sleep(0.2)
             actionGroups = actionGroupMembers(apiURL,"nightlight",True)
@@ -45,10 +46,12 @@ def bewegungssensor(pin):
             for i in actionGroups.getAGPArr():
                 aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMemberMEMBERS('offset')))
         elif input == False:
+            print "Off nightlight"
             actionGroups = actionGroupMembers(apiURL, "nightlight/disable?StringID=WS2801_01")
             for i in aktiveNightlight:
                 i.disableAlarm()
-
+                # timer wird nicht mehr gebraucht
+                aktiveNightlight.remove(i)
 
 
 if treiberConfig.getConfigParam("debugmode").lower() == "false":
@@ -114,8 +117,8 @@ try:
                 aktiveTimer.remove(timer)
 
         if len(aktiveTimer) == 0:
-            if len(nightlight) >0:
-                nightlight[0].writeStrip()
+            if len(aktiveNightlight) >0:
+                aktiveNightlight[0].writeStrip()
 
 
 

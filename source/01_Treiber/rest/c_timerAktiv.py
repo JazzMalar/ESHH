@@ -100,7 +100,10 @@ class timerAktiv:
                 self.colorNow.setColor(color,calculate*step)
 
     def run(self):
-        print "timer run uuid: " + str(self.uuid)
+        print "timer run uuid: " + str(self.uuid) +" alarmId: "+ str(self.alarmId)
+        if self.alarmId == "nightlight":
+            return
+        # wird nur gemacht um zu schauen, ob alarm disabled wurde!!
         api = callApi(self.apiUrl,"alarms?AlarmID="+str(self.alarmId))
         for i in api.getArray():
             print i
