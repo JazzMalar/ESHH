@@ -39,13 +39,14 @@ def bewegungssensor(pin):
         if(input):
             print "On nightlight"
             activateNightlight = callApi(apiURL, "nightlight/activate?StringID=WS2801_01")
-            time.sleep(0.2)
+            time.sleep(0.2) # wird benoetigt, damit tomcat reagieren kann!!
             actionGroups = actionGroupMembers(apiURL,"nightlight",True)
 
-            # wird benoetigt, damit tomcat reagieren kann!!
-            for i in actionGroups.getAGPArr():
-                aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMemberMEMBERS('offset')))
-            aktiveNightlight[0].writeStrip()
+            if len(aktiveNightlight)==0:
+               # gibt nur ein strip!!
+                for i in actionGroups.getAGPArr():
+                    aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMemberMEMBERS('offset')))
+                aktiveNightlight[0].writeStrip()
         elif input == False:
             print "Off nightlight"
             actionGroups = actionGroupMembers(apiURL, "nightlight/disable?StringID=WS2801_01")
