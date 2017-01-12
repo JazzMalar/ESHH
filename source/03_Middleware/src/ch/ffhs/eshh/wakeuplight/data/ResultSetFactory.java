@@ -168,10 +168,10 @@ public enum ResultSetFactory
 
 				ResultSetMetaData meta = rs.getMetaData();
 				int cols = meta.getColumnCount();
-				Object[] result = new Object[cols];
 
 				do
 				{
+					Object[] result = new Object[cols];
 					for (int i = 0; i < cols; i++)
 					{
 						result[i] = rs.getObject(i + 1);

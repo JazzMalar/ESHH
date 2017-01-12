@@ -388,7 +388,13 @@ public class MySQLDBProxy implements IDBProxy
 
 			int actionGroupId = (int) os.get(0)[0];
 
-			run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,1)", actionGroupId);
+			os = run.query("select idActionGroup from ActiveActionGroups WHERE idActionGroup = ? AND isNightlight = 1", 
+					ResultSetFactory.factory.ObjectResultHandler(), actionGroupId); 
+			
+			if(os == null)
+			{
+				run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,1)", actionGroupId);				
+			}
 
 			result = GetActionGroup(actionGroupId);
 
@@ -432,8 +438,14 @@ public class MySQLDBProxy implements IDBProxy
 	{
 		try
 		{
-
-			run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,0)", groupId);
+			List<Object[]> os = run.query("select idActionGroup from ActiveActionGroups WHERE idActionGroup = ? AND isNightlight = 1", 
+					ResultSetFactory.factory.ObjectResultHandler(), groupId); 
+			
+			if(os == null)
+			{
+				run.update("insert into ActiveActionGroups (idActionGroup, isNightlight) VALUES (?,0)", groupId);		
+			}
+			
 		}
 		catch (Exception e)
 		{
@@ -447,7 +459,6 @@ public class MySQLDBProxy implements IDBProxy
 	{
 		try
 		{
-
 			run.update("delete from ActiveActionGroups where idActionGroup = ? and isNightlight = 0", groupId);
 		}
 		catch (Exception e)
@@ -503,14 +514,14 @@ public class MySQLDBProxy implements IDBProxy
 		try
 		{
 			List<Object[]> os = run.query(
-			        "SELECT idActionGroup as groupId, 0 as alarm FROM ActiveActionGroups WHERE isNightlight = 0 UNION SELECT idActionGroup as groupId, active as alarm FROM mydb.Alarm where repeatPattern & ? and StartTime < TIME(NOW()) and date_sub(now(), INTERVAL 10 MINUTE) > StartTime and Active = 1",
+			        "SELECT idActionGroup as groupId, 0 as alarm FROM ActiveActionGroups WHERE isNightlight = 0 UNION SELECT idActionGroup as groupId, active as alarm FROM mydb.Alarm where repeatPattern & ? and StartTime < TIME(NOW()) and date_add(StartTime, INTERVAL 10 MINUTE) > NOW() and Active = 1",
 			        ResultSetFactory.factory.ObjectResultHandler(), repeatPattern.toString());
 
 			for (Object[] o : os)
 			{
 				int groupId = (int) o[0];
 				int isAlarm = ((Long) o[1]).intValue();
-
+				
 				List<ActionGroupMember> agm = run.query(
 				        "select idActionGroupMember, idGroup, idDevice, idAction, offset from ActionGroupMember WHERE idGroup = ?",
 				        ResultSetFactory.factory.AGMResultHandler(), groupId);
