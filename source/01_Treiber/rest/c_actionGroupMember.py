@@ -9,6 +9,8 @@ class actionGroupMember:
         self.dict = dict
 
     def getFromActionGroupMember(self, name):
+        print "name: "+str(name)
+        print self.dict
         ret = str(self.dict[name])
         print ret
         return ret

@@ -101,18 +101,17 @@ class timerAktiv:
 
     def run(self):
         print "timer run uuid: " + str(self.uuid) +" alarmId: "+ str(self.alarmId)
-        if self.alarmId == "nightlight":
-            return
-        # wird nur gemacht um zu schauen, ob alarm disabled wurde!!
-        api = callApi(self.apiUrl,"alarms?AlarmID="+str(self.alarmId))
-        for i in api.getArray():
-            print i
-            if i["alarmId"] == str(self.alarmId):
-                if i["enabled"].lower() == "false":
-                    #alarm wurde abgeschaltet!
-                    # self.strip.removeLEDUsedByFullStrip(self.uuid)
-                    # self.activ = False
-                    self.disableAlarm()
+        if self.alarmId != "nightlight":
+            # wird nur gemacht um zu schauen, ob alarm disabled wurde!!
+            api = callApi(self.apiUrl,"alarms?AlarmID="+str(self.alarmId))
+            for i in api.getArray():
+                print i
+                if i["alarmId"] == str(self.alarmId):
+                    if i["enabled"].lower() == "false":
+                        #alarm wurde abgeschaltet!
+                        # self.strip.removeLEDUsedByFullStrip(self.uuid)
+                        # self.activ = False
+                        self.disableAlarm()
         #Zeitrechnung wird nicht umbedingt benoetigt, da ausserhalb eh auf die naechste min gewartet wird!
         now = datetime.datetime.now()
         timecalc = (now-self.oldTime)
