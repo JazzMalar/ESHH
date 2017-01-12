@@ -72,10 +72,9 @@ class timerAktiv:
                 self.colorEnd       = timerAktiv.color(self.deviceActionsObj.getFieldValue("ColorEnd"))
                 self.anzLed         = self.deviceActionsObj.getFieldValue("NumLeds")
                 break
-        #Todo hier evt. anzahl LEDs uebergeben!
         self.strip = deviceWS2801().getStrip()
         self.setStrip(self.colorStart)
-        self.nextStep = 1
+        self.nextStep = 2
         self.oldTime = datetime.datetime.now()
 
     def setStrip(self,color):
