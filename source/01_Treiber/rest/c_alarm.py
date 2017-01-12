@@ -9,7 +9,9 @@ class alarm:
         return self.active
 
     def updateAlarm(self,startTime,repeatPattern,alarmId,active,idActivationGroup,offset):
-        self.startTime = startTime[-9:-4] # Nur Zeit aus startTime auslesen 1970-01-01T08:00:00Z
+        posOfT = startTime.index('T')
+        #self.startTime = startTime[-9:-4] # Nur Zeit aus startTime auslesen 1970-01-01T08:00:00Z
+        self.startTime = startTime[posOfT+1:posOfT+6]
         self.repeatPattern = repeatPattern
         self.alarmId = int(alarmId)
         self.active = bool(active)
@@ -28,6 +30,12 @@ class alarm:
     def getIdActivationGroup(self):
         return self.idActivationGroup
 
+
+    def setActive(self,active):
+        if active.lower() == "true":
+            self.active = True
+        else:
+            self.active = False
    # def updateIsActive(self,active):
         # if active == "true":
         #     return True
@@ -64,7 +72,7 @@ class alarm:
         now = self.calculateMins(self.getNow())
         startTime = self.calculateMins(self.startTime)
         calculatedTime = startTime - now
-        print "Zeit zu warten bis timer startet: "+str(calculatedTime)
+        print "Zeit zu warten bis timer startet: "+str(calculatedTime)+" alarmId:"+str(self.getIdAlarm())
         return calculatedTime
 
     def getIsWeekdayTrue(self,weekday):
