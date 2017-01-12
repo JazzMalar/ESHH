@@ -45,12 +45,14 @@ def bewegungssensor(pin):
             # wird benoetigt, damit tomcat reagieren kann!!
             for i in actionGroups.getAGPArr():
                 aktiveNightlight.append(timerAktiv(apiURL,i.getFromActionGroupMember('groupId'),"nightlight",i.getFromActionGroupMemberMEMBERS('offset')))
+            aktiveNightlight[0].writeStrip()
         elif input == False:
             print "Off nightlight"
             actionGroups = actionGroupMembers(apiURL, "nightlight/disable?StringID=WS2801_01")
             for i in aktiveNightlight:
                 i.disableAlarm()
                 # timer wird nicht mehr gebraucht
+                i.writeStrip()
                 aktiveNightlight.remove(i)
 
 
