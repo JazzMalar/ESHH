@@ -97,7 +97,9 @@ class timerAktiv:
             if (self.colorStart.getColor(color) < self.colorEnd.getColor(color)):
                 calculate = (self.colorEnd.getColor(color) - self.colorStart.getColor(color))/self.maxStep
                 self.colorNow.setColor(color,calculate*step)
-
+            else:
+                calculate = (self.colorStart.getColor(color)-self.colorEnd.getColor(color) )/self.maxStep
+                self.colorNow.setColor(color, calculate * step)
     def run(self):
         print "timer run uuid: " + str(self.uuid) +" alarmId: "+ str(self.alarmId)
         if self.alarmId != "nightlight":
