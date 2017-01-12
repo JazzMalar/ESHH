@@ -74,7 +74,7 @@ class timerAktiv:
                 break
         self.strip = deviceWS2801().getStrip()
         self.setStrip(self.colorStart)
-        self.nextStep = 2
+        self.nextStep = 1
         self.oldTime = datetime.datetime.now()
 
     def setStrip(self,color):
@@ -100,7 +100,7 @@ class timerAktiv:
                 self.colorNow.setColor(color,self.colorStart.getColor(color)+calculate*step)
             else:
                 calculate = (self.colorStart.getColor(color)-self.colorEnd.getColor(color) )/self.maxStep
-                self.colorNow.setColor(color,self.colorEnd.getColor(color) - calculate * step)
+                self.colorNow.setColor(color,self.colorStart.getColor(color) - calculate * step)
     def run(self):
         print "timer run uuid: " + str(self.uuid) +" alarmId: "+ str(self.alarmId)
         if self.alarmId != "nightlight":
