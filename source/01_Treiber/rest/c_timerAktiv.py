@@ -94,6 +94,7 @@ class timerAktiv:
             step = 1
         colors = ['r','g','b']
         for color in colors:
+            print "calculate color start: "+str(self.colorStart.getColor(color))+" stop:"+str(self.colorEnd.getColor(color))
             if (self.colorStart.getColor(color) < self.colorEnd.getColor(color)):
                 calculate = (self.colorEnd.getColor(color) - self.colorStart.getColor(color))/self.maxStep
                 self.colorNow.setColor(color,self.colorStart.getColor(color)+calculate*step)
