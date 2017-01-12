@@ -56,8 +56,8 @@ class LED(object):
 
     def getRGB(self):
         self.__color[0] = self.__red
-        self.__color[1] = self.__green
-        self.__color[2] = self.__blue
+        self.__color[1] = self.__blue
+        self.__color[2] = self.__green
         self.__setNewColorFalse()
         return self.__color
 
