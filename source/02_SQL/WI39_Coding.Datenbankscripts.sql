@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`ActionGroupMember` (
     FOREIGN KEY (`idDevice`)
     REFERENCES `mydb`.`Device` (`idDevice`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
