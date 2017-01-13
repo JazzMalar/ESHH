@@ -9,13 +9,15 @@ class actionGroupMember:
         self.dict = dict
 
     def getFromActionGroupMember(self, name):
+        #print "name: "+str(name)
+        #print self.dict
         ret = str(self.dict[name])
-        print ret
+        #print ret
         return ret
 
     def getFromActionGroupMemberMEMBERS(self, name):
         ret = str(self.dict["members"][name])
-        print ret
+        #print ret
         return ret
 
 
@@ -29,7 +31,7 @@ class actionGroupMembers:
         if xml == False:
             return
         fulldict = xmltodict.parse(xml)
-        print fulldict
+        #print fulldict
         #print str(fulldict)
         # print str(fulldict).count('actionGroupMember')/2
         #print fulldict['actionGroupMembers']['actionGroupMember'][0]

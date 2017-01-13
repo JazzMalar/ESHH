@@ -72,7 +72,6 @@ class timerAktiv:
                 self.colorEnd       = timerAktiv.color(self.deviceActionsObj.getFieldValue("ColorEnd"))
                 self.anzLed         = self.deviceActionsObj.getFieldValue("NumLeds")
                 break
-        #Todo hier evt. anzahl LEDs uebergeben!
         self.strip = deviceWS2801().getStrip()
         self.setStrip(self.colorStart)
         self.nextStep = 1
@@ -95,24 +94,26 @@ class timerAktiv:
             step = 1
         colors = ['r','g','b']
         for color in colors:
+            print "calculate color start: "+str(self.colorStart.getColor(color))+" stop:"+str(self.colorEnd.getColor(color))
             if (self.colorStart.getColor(color) < self.colorEnd.getColor(color)):
                 calculate = (self.colorEnd.getColor(color) - self.colorStart.getColor(color))/self.maxStep
-                self.colorNow.setColor(color,calculate*step)
-
+                self.colorNow.setColor(color,self.colorStart.getColor(color)+calculate*step)
+            else:
+                calculate = (self.colorStart.getColor(color)-self.colorEnd.getColor(color) )/self.maxStep
+                self.colorNow.setColor(color,self.colorStart.getColor(color) - calculate * step)
     def run(self):
         print "timer run uuid: " + str(self.uuid) +" alarmId: "+ str(self.alarmId)
-        if self.alarmId == "nightlight":
-            return
-        # wird nur gemacht um zu schauen, ob alarm disabled wurde!!
-        api = callApi(self.apiUrl,"alarms?AlarmID="+str(self.alarmId))
-        for i in api.getArray():
-            print i
-            if i["alarmId"] == str(self.alarmId):
-                if i["enabled"].lower() == "false":
-                    #alarm wurde abgeschaltet!
-                    # self.strip.removeLEDUsedByFullStrip(self.uuid)
-                    # self.activ = False
-                    self.disableAlarm()
+        if self.alarmId != "nightlight":
+            # wird nur gemacht um zu schauen, ob alarm disabled wurde!!
+            api = callApi(self.apiUrl,"alarms?AlarmID="+str(self.alarmId))
+            for i in api.getArray():
+                print i
+                if i["alarmId"] == str(self.alarmId):
+                    if i["enabled"].lower() == "false":
+                        #alarm wurde abgeschaltet!
+                        # self.strip.removeLEDUsedByFullStrip(self.uuid)
+                        # self.activ = False
+                        self.disableAlarm()
         #Zeitrechnung wird nicht umbedingt benoetigt, da ausserhalb eh auf die naechste min gewartet wird!
         now = datetime.datetime.now()
         timecalc = (now-self.oldTime)
