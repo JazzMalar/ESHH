@@ -1,1 +1,1 @@
-Script fuer Tests, die ohne weitere Periferie ausgefuehrt werden koennen.
+Script fuer Tests, die ohne weitere Peripherie ausgefuehrt werden koennen.
