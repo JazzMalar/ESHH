@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * DeviceActionField.java
+ * POJO-Objekt
+ */
 package ch.ffhs.eshh.wakeuplight.model;
 
 import javax.xml.bind.annotation.XmlRootElement;

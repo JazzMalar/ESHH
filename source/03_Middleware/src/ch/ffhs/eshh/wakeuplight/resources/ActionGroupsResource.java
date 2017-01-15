@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * ActionGroupsResource.java
+ * API-Endpunkt für ActionGroup
+ */
 package ch.ffhs.eshh.wakeuplight.resources;
 
 import java.util.ArrayList;
@@ -25,6 +31,10 @@ public class ActionGroupsResource
 	@Context
 	Request request;
 
+	/**
+	 * Gibt alle aktiven ActionGroups zurück
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public List<ActionGroup> getActiveActionGroups()
@@ -35,6 +45,10 @@ public class ActionGroupsResource
 
 	}
 
+	/**
+	 * Aktiviert eine frei wählbare ActionGroup
+	 * @param groupId
+	 */
 	@GET
 	@Path("/activate")
 	@Produces(MediaType.TEXT_XML)
@@ -46,6 +60,10 @@ public class ActionGroupsResource
 		}
 	}
 
+	/**
+	 * Deaktiviert eine frei wählbare ActionGroup
+	 * @param groupId
+	 */
 	@GET
 	@Path("/disable")
 	@Produces(MediaType.TEXT_XML)

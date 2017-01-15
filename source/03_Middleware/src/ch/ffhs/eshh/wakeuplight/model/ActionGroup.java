@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * ActionGroup.java
+ * POJO-Objekt für ActionGroups
+ */
 package ch.ffhs.eshh.wakeuplight.model;
 
 import java.util.List;

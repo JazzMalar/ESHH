@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * AlarmsResource.java
+ * API-Endpunkt für Alarm
+ */
 package ch.ffhs.eshh.wakeuplight.resources;
 
 import java.io.IOException;
@@ -34,7 +40,11 @@ public class AlarmsResource
 	@Context
 	Request request;
 
-	// Return the list of todos to the user in the browser
+	/**
+	 * Gibt entweder alle Alarme oder einen einzelnen Alarm zurück, wenn eine AlarmID mitgegeben wurde.
+	 * @param alarmId
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public List<Alarm> getAlarmsBrowser(@QueryParam("AlarmID") int alarmId)
@@ -53,6 +63,16 @@ public class AlarmsResource
 		return alarms;
 	}
 
+	/**
+	 * Erstellt einen neuen alarm
+	 * @param startTimeString
+	 * @param offset
+	 * @param repeatPattern
+	 * @param enabledString
+	 * @param actionGroup
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -79,6 +99,12 @@ public class AlarmsResource
 		servletResponse.sendRedirect("../create_alarm.html");
 	}
 
+	/**
+	 * Löscht einen Alarm
+	 * @param alarmId
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_XML)
 	public void deleteAlarm(@QueryParam("ID") int alarmId, @Context HttpServletResponse servletResponse)

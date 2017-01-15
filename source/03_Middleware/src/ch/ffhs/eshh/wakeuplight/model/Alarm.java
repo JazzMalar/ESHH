@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * Alarm.java
+ * POJO-Objekt
+ */
 package ch.ffhs.eshh.wakeuplight.model;
 
 import java.util.Date;

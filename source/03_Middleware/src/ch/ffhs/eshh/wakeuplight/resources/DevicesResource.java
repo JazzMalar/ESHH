@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * DevicesResource.java
+ * API-Endpunkt für Devices
+ */
 package ch.ffhs.eshh.wakeuplight.resources;
 
 import java.io.IOException;
@@ -31,7 +37,12 @@ public class DevicesResource
 	@Context
 	Request request;
 
-	// Return the list of todos to the user in the browser
+	/**
+	 * Gibt entweder alle oder ein einzelnes Gerät als XML zurück. 
+	 * @param stringId
+	 * @param deviceId
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public List<Device> getDevicesBrowser(@QueryParam("StringID") String stringId, @QueryParam("DeviceID") int deviceId)
@@ -62,6 +73,14 @@ public class DevicesResource
 		return devices;
 	}
 
+	/**
+	 * Erstellt ein neues Gerät im System.
+	 * @param deviceName
+	 * @param stringId
+	 * @param gpioString
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -77,6 +96,13 @@ public class DevicesResource
 		servletResponse.sendRedirect("../create_device.html");
 	}
 
+	/**
+	 * Löscht ein bestehendes Gerät aus dem System.
+	 * @param stringId
+	 * @param deviceId
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_XML)
 	public void deleteDevice(@QueryParam("StringID") String stringId, @QueryParam("ID") int deviceId,
