@@ -1,0 +1,1 @@
+Implementiert aktive Timer. Beinhaltet run funktion des Timers, die durchlaufen wird bis Timer abgearbeitet wurde.

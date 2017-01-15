@@ -1,0 +1,1 @@
+Implementiert Hauptfunktionen von einem LED (Farben RGB).

@@ -1,0 +1,1 @@
+Genereller API-Request.

@@ -1,0 +1,1 @@
+Implementiert die Logging-Funktionen, damit in ein File geloggt werden kann.

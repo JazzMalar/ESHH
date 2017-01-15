@@ -1,0 +1,1 @@
+Wird zum einlesen der Configuration benoetigt. Config ist im Order Config. Es wird nicht jeder Parameter in der Config benoetigt, da diese Teilweise auch von der API mitgeliefert werden.

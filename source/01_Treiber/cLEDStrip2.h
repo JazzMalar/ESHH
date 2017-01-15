@@ -1,0 +1,1 @@
+Implementation des ganzen Strips als ein Object. Beinhaltet ebenfalls die Schreibfunktion, damit der Strip ueber SPI geschrieben werden kann.

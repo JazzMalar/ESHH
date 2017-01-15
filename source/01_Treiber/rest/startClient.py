@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from c_api import callApi
 from c_alarm import alarm
 from c_timerAktiv import timerAktiv

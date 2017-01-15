@@ -1,0 +1,1 @@
+Implementiert den LEDStrip als singleton.

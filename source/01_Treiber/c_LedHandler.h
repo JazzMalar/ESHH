@@ -1,0 +1,1 @@
+Implementiert die abstrakten LEDs von LEDObject. Gibt immer LED mit hoechster Prio an Strip zurueck.

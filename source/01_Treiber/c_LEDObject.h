@@ -1,0 +1,1 @@
+Implementiert das abstrakte LED mit mit Prioritaet und "genutzt von".

@@ -1,6 +1,4 @@
 import xmltodict
-import sys
-sys.path.append('../')
 import utilitis
 
 

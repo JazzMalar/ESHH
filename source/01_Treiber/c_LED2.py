@@ -13,7 +13,7 @@ class LED(object):
         self.logger.log("debug","init red: " + str(self.__red) + " green: " + str(self.__green) + " blue: " + str(self.__green))
         return self
 
-    def checkColor(self,color):
+    def __checkColor(self, color):
         if color<256 and color>=0:
             return True
         else:
@@ -22,21 +22,21 @@ class LED(object):
 
     def setR(self,r):
         if(self.__red != r):
-            if(self.checkColor(r)):
+            if(self.__checkColor(r)):
                 self.__red            = r
                 self.__newColor       = True
         return self
 
     def setG(self, g):
         if (self.__green != g):
-            if (self.checkColor(g)):
+            if (self.__checkColor(g)):
                 self.__green = g
                 self.__newColor = True
         return self
 
     def setB(self, b):
         if (self.__blue != b):
-            if (self.checkColor(b)):
+            if (self.__checkColor(b)):
                 self.__blue = b
                 self.__newColor = True
         return self

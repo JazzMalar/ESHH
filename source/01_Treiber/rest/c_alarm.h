@@ -1,0 +1,1 @@
+Abstraktion der API-Abfrage alarm.

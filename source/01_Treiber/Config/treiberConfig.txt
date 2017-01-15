@@ -9,7 +9,7 @@ anzLEDs         = 160
 debugMode       = True
 
 #kontakt fuer pir
-pir             = 26
+pir             = 37
 
 [api-config]
 #api = http://178.83.203.182:8080/api/
