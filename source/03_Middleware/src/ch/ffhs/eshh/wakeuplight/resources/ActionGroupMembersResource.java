@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * ActionGroupMembersResource.java
+ * API-Endpunkt für ActionGroupMembers
+ */
 package ch.ffhs.eshh.wakeuplight.resources;
 
 import java.io.IOException;
@@ -32,7 +38,11 @@ public class ActionGroupMembersResource
 	@Context
 	Request request;
 
-	// Return the list of todos to the user in the browser
+	/**
+	 * Gibt alle ActionGroupMembers einer Gruppe als XML im Browser zurück
+	 * @param groupId - anzuzeigende Gruppe
+	 * @return 
+	 */
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public List<ActionGroupMember> getActionGroupMembersBrowser(@QueryParam("GroupID") int groupId)
@@ -51,6 +61,15 @@ public class ActionGroupMembersResource
 		return actionGroupMembers;
 	}
 
+	/**
+	 * Erstellt einen neuen ActionGroupMember
+	 * @param groupId
+	 * @param deviceId
+	 * @param actionId
+	 * @param offset
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -68,6 +87,13 @@ public class ActionGroupMembersResource
 		servletResponse.sendRedirect("../add_actionGroupMember.html");
 	}
 
+	/**
+	 * Löscht einen ActionGroupMember
+	 * @param groupId
+	 * @param deviceId
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_XML)
 	public void deleteActionGroupMember(@QueryParam("GroupID") int groupId, @QueryParam("DeviceID") int deviceId,

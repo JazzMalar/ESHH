@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * DeviceActionsResource.java
+ * API-Endpunkt für DeviceActions
+ */
 package ch.ffhs.eshh.wakeuplight.resources;
 
 import java.io.IOException;
@@ -32,7 +38,12 @@ public class DeviceActionsResource
 	@Context
 	Request request;
 
-	// Return the list of todos to the user in the browser
+	/**
+	 * Gibt entweder alle DeviceAction als XML zurück oder eine einzelne wenn die benötigten Parameter mitgegeben wurden.
+	 * @param stringId
+	 * @param deviceActionId
+	 * @return
+	 */
 	@GET
 	@Produces({ MediaType.TEXT_XML, "application/json" })
 	public List<DeviceAction> getDeviceActionsBrowser(@QueryParam("StringID") String stringId,
@@ -51,6 +62,12 @@ public class DeviceActionsResource
 		return deviceActions;
 	}
 
+	/**
+	 * Erstellt eine neue DeviceAction
+	 * @param formParams
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -74,6 +91,13 @@ public class DeviceActionsResource
 		servletResponse.sendRedirect("../create_deviceAction.html");
 	}
 
+	/**
+	 * Löscht eine bestehende DeviceAction
+	 * @param stringId
+	 * @param id
+	 * @param servletResponse
+	 * @throws IOException
+	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_XML)
 	public void deleteDeviceAction(@QueryParam("StringID") String stringId, @QueryParam("ID") int id,

@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * NightlightsResource.java
+ * API-Endpunkt für Nachtlichter
+ */
 package ch.ffhs.eshh.wakeuplight.resources;
 
 import java.util.ArrayList;
@@ -26,9 +32,13 @@ public class NightlightsResource
 	@Context
 	Request request;
 
+	/**
+	 * Gibt alle aktiven Nachtlichter zurück
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.TEXT_XML)
-	public List<ActionGroup> getActiveActionGroups()
+	public List<ActionGroup> getActiveNightlights()
 	{
 		List<ActionGroup> actionGroups = new ArrayList<ActionGroup>();
 		actionGroups = DBProxyFactory.factory.g().GetActiveNightLights();
@@ -36,6 +46,11 @@ public class NightlightsResource
 
 	}
 
+	/**
+	 * Aktiviert ein Nachtlicht anhand seiner Geräte-Identifikation
+	 * @param stringId
+	 * @return
+	 */
 	@GET
 	@Path("/activate")
 	@Produces(MediaType.TEXT_XML)
@@ -55,6 +70,11 @@ public class NightlightsResource
 		return actionGroupMembers;
 	}
 
+	/**
+	 * Deaktiviert ein Nachtlicht
+	 * @param stringId
+	 * @return
+	 */
 	@GET
 	@Path("/disable")
 	@Produces(MediaType.TEXT_XML)
@@ -74,6 +94,12 @@ public class NightlightsResource
 		return actionGroupMembers;
 	}
 
+	/**
+	 * Assoziert ein Gerät mit einer ActionGroup als Nachtlicht
+	 * @param stringId
+	 * @param groupId
+	 * @return
+	 */
 	@GET
 	@Path("/associate")
 	public List<ActionGroupMember> associateNightlight(@QueryParam("StringID") String stringId,
@@ -93,6 +119,12 @@ public class NightlightsResource
 		return actionGroupMembers;
 	}
 
+	/**
+	 * löscht die Assoziation zwischen einem Gerät und einer ActionGroup als Nachtlicht
+	 * @param stringId
+	 * @param groupId
+	 * @return
+	 */
 	@GET
 	@Path("/disassociate")
 	public List<ActionGroupMember> disassociateNightlight(@QueryParam("StringID") String stringId,

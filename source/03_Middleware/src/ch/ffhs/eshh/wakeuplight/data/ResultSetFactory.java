@@ -1,3 +1,9 @@
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * ResultSetFactory.java
+ * ORM-Klasse zum Mappen der relationalen Daten der DB auf die Java POJOs. 
+ */
 package ch.ffhs.eshh.wakeuplight.data;
 
 import java.sql.ResultSet;
@@ -23,6 +29,10 @@ public enum ResultSetFactory
 
 	}
 
+	/**
+	 * Mappt die DeviceAction_<Produkt> Tabellen auf eine Liste von DeviceAction-Objekten 
+	 * @return Selektierte DeviceAction oder null wenn keine gefunden wurden
+	 */
 	public ResultSetHandler<DeviceAction> DeviceActionResultHandler()
 	{
 		ResultSetHandler<DeviceAction> handler = new ResultSetHandler<DeviceAction>() {
@@ -66,6 +76,10 @@ public enum ResultSetFactory
 		return handler;
 	}
 
+	/**
+	 * Mappt die Einträge aus der ActionGroupMember Tabelle auf eine Liste von ActionGroupMember Objekten
+	 * @return Selektierte ActionGroupMember oder null wenn keine gefunden wurden
+	 */
 	public ResultSetHandler<List<ActionGroupMember>> AGMResultHandler()
 	{
 		ResultSetHandler<List<ActionGroupMember>> handler = new ResultSetHandler<List<ActionGroupMember>>() {
@@ -96,6 +110,10 @@ public enum ResultSetFactory
 		return handler;
 	}
 
+	/**
+	 * Mappt die Einträge aus der Alarms Tabelle auf eine Liste von Alarm Objekten
+	 * @return Selektierte Alarme oder null wenn keine gefunden wurden
+	 */
 	public ResultSetHandler<List<Alarm>> AlarmResultHandler()
 	{
 		ResultSetHandler<List<Alarm>> handler = new ResultSetHandler<List<Alarm>>() {
@@ -126,6 +144,10 @@ public enum ResultSetFactory
 		return handler;
 	}
 
+	/**
+	 * Mappt die Einträge der Device-Tabelle auf eine Liste von Device-Objekten
+	 * @return Selektierte Geräte aus der Device-Tabelle oder null wenn keine gefunden wurden
+	 */
 	public ResultSetHandler<List<Device>> DeviceResultHandler()
 	{
 		ResultSetHandler<List<Device>> handler = new ResultSetHandler<List<Device>>() {
@@ -155,6 +177,14 @@ public enum ResultSetFactory
 		return handler;
 	}
 
+	/**
+	 * Mappt Daten aus einer nicht vorgegebenen Tabelle zu einer Liste von Object-Arrays. 
+	 * Kann dafür benutzt werden, wenn nur einzelne Werte abgefragt werden sollen. Der Object
+	 * Array enthält genau soviele Werte, wie Spalten selektiert wurden. Die Liste enthält 
+	 * genau soviele Einträge wie Zeilen selektiert wurden. Der Array wird in der Reihenfolge
+	 * befüllt, wie der SELECT die Spalten vorgibt. 
+	 * @return Selektierte Spalten als Objects-Array
+	 */
 	public ResultSetHandler<List<Object[]>> ObjectResultHandler()
 	{
 		ResultSetHandler<List<Object[]>> handler = new ResultSetHandler<List<Object[]>>() {

@@ -1,4 +1,9 @@
-
+/**
+ * Projekt WakeUp-Light - ES&HH
+ * Andreas Züger & Markus Schenk
+ * MySQLDBProxy.java
+ * MySQL spezifische Implementierung des DBProxy-Interface
+ */
 package ch.ffhs.eshh.wakeuplight.data;
 
 import java.sql.SQLException;
